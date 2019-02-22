@@ -1,0 +1,147 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8" >
+    <title>个人中心</title>
+    <link href="webjars/bootstrap/3.0.1/css/bootstrap.min.css" rel="stylesheet">
+
+</head>
+<body>
+<div id="workingArea" class="container">
+    <div class="row clearfix">
+        <div style="margin-top: 60px"></div>
+        <!--导航栏-->
+        <div class="col-md-12 column">
+            <!--顶部导航栏-->
+            <nav class="navbar navbar-default navbar-inverse navbar-fixed-top" role="navigation">
+                <div class="navbar-header">
+                    <button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#bs-example-navbar-collapse-1"> <span class="sr-only">Toggle navigation</span><span class="icon-bar"></span><span class="icon-bar"></span><span class="icon-bar"></span></button> <a class="navbar-brand" href="fore_home" >小萝筐新闻网</a>
+                </div>
+
+                <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
+                    <ul class="nav navbar-nav">
+                        <li  class="active">
+                            <a href="#">国内新闻</a>
+                        </li>
+                        <li>
+                            <a href="#">国外新闻</a>
+                        </li>
+                        <li class="dropdown">
+                            <a href="#" class="dropdown-toggle" data-toggle="dropdown">校内新闻<strong class="caret"></strong></a>
+                            <ul class="dropdown-menu">
+                                <li>
+                                    <a href="#">Action</a>
+                                </li>
+                                <li>
+                                    <a href="#">Another action</a>
+                                </li>
+                                <li>
+                                    <a href="#">Something else here</a>
+                                </li>
+                                <li class="divider">
+                                </li>
+                                <li>
+                                    <a href="#">Separated link</a>
+                                </li>
+                                <li class="divider">
+                                </li>
+                                <li>
+                                    <a href="#">One more separated link</a>
+                                </li>
+                            </ul>
+                        </li>
+                    </ul>
+                    <form class="navbar-form navbar-left" role="search">
+                        <div class="form-group">
+                            <input type="text" class="form-control" />
+                        </div>
+                        <button type="submit" class="btn btn-default">Submit</button>
+                    </form>
+                    <ul class="nav navbar-nav navbar-right">
+                        <li th:if="${null==session.user}">
+                            <a href="#">请登录</a>
+                        </li>
+                        <li class="dropdown" th:if="${null!=session.user}" >
+                            <a  href="#" class="dropdown-toggle" data-toggle="dropdown" ><span th:text="${session.user.name}"></span><strong class="caret"></strong></a>
+                            <ul class="dropdown-menu">
+                                <li>
+                                    <a href="personal_zone">个人中心</a>
+                                </li>
+                                <li>
+                                    <a href="#" @click="logout">退出</a>
+                                </li>
+                                <!--<li>-->
+                                <!--<a href="#">Something else here</a>-->
+                                <!--</li>-->
+                                <!--<li class="divider">-->
+                                <!--</li>-->
+                                <!--<li>-->
+                                <!--<a href="#">Separated link</a>-->
+                                <!--</li>-->
+                            </ul>
+                        </li>
+                    </ul>
+                </div>
+            </nav>
+        </div>
+    </div>
+    <div class="row clearfix">
+        <div class="col-md-2 column">
+            <ul class="nav nav-stacked nav-pills">
+                <li>
+                    <a href="#"> 个人信息管理</a>
+                </li>
+                <li class="dropdown ">
+                    <a href="#" data-toggle="dropdown" class="dropdown-toggle">投稿管理<strong class="caret"></strong></a>
+                    <ul class="dropdown-menu">
+                        <li>
+                            <a href="#">新增投稿</a>
+                        </li>
+                        <li>
+                            <a href="#">个人投稿查询</a>
+                        </li>
+                    </ul>
+                </li>
+                <li class="dropdown ">
+                    <a href="#" data-toggle="dropdown" class="dropdown-toggle">审稿管理<strong class="caret"></strong></a>
+                    <ul class="dropdown-menu">
+                        <li>
+                            <a href="#">未审核新闻</a>
+                        </li>
+                        <li>
+                            <a href="#">通过新闻</a>
+                        </li>
+                        <li>
+                            <a href="#">未通过新闻</a>
+                        </li>
+                    </ul>
+                </li>
+            </ul>
+        </div>
+        <div class="col-md-6 col-md-offset-1 column">
+            <div class="row clearfix">
+                <div class="col-md-8 column">
+                    <div class="row clearfix">
+                        <div class="col-md-6 column">
+                            <label class="text-muted">用户名：</label>
+                            <input >
+                        </div>
+                        <div class="col-md-6 column">
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-4 column">
+                    <img alt="140x140" src="http://ibootstrap-file.b0.upaiyun.com/lorempixel.com/140/140/default.jpg" class="img-thumbnail" />
+                    <button type="button" class="btn btn-warning btn-sm btn-block">按钮</button>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<script src="webjars/jquery/2.0.0/jquery.min.js"> </script>
+<script src="webjars/bootstrap/3.0.1/js/bootstrap.min.js"> </script>
+<script src="js/vue/2.5.16/vue.min.js"></script>
+<script src="js/axios/0.17.1/axios.min.js"></script>
+<script src="js/moment/2.22.2/moment.js"></script> <!-- vue.js 格式化日期用的 -->
+</body>
+</html>

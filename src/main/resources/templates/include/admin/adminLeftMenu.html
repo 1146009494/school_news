@@ -1,0 +1,40 @@
+<div class="col-xs-3 " th:fragment="html" xmlns:th="http://www.w3.org/1999/xhtml">
+    <!--左侧菜单栏开始-->
+    <ul class="nav nav-pills nav-stacked" style="width:100px">
+        <li role="presentation">
+            <!--<span th:text="${null=session.user}?${session.user.name}:未登录"></span>-->
+            <span th:if="${null!=session.user}">你好，[[${session.user.name}]],<a href="fore_login">退出</a></span>
+
+
+        </li>
+        <li role="presentation">
+
+            <a href="user_info">个人信息管理</a>
+
+        </li>
+        <li role="presentation" class="dropdown">
+            <a href="#" class="dropdown-toggle" data-toggle="dropdown">个人新闻管理<span class="caret"></span></a>
+            <ul class="dropdown-menu">
+                <li><a href="new_add">发布新闻</a></li>
+                <li><a href="mynew">我的发布</a></li>
+            </ul>
+
+        <li role="presentation" th:if="'管理员'==${session.user.role}">
+            <a href="#" class="dropdown-toggle" data-toggle="dropdown">用户管理<span class="caret"></span></a>
+            <ul class="dropdown-menu">
+                <li><a href="user_add">新增用户</a></li>
+                <li><a href="user_write">新闻投稿员管理</a></li>
+                <li><a href="user_read">新闻审核员管理</a></li>
+            </ul>
+        </li>
+        <li role="presentation" class="dropdown">
+            <a href="#" class="dropdown-toggle" data-toggle="dropdown">新闻管理<span class="caret"></span></a>
+            <ul class="dropdown-menu">
+                <li><a href="new_add">发布新闻</a></li>
+                <li><a href="new_confirm">新闻信息管理</a></li>
+                <li><a href="new_NoConfirm">未审核新闻管理</a></li>
+                <li><a href="new_type">新闻类别管理</a></li>
+            </ul>
+    </ul>
+    <!--左侧菜单栏结束-->
+</div>

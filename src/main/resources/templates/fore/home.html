@@ -1,0 +1,278 @@
+<!DOCTYPE html>
+<html lang="en">
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head >
+    <meta charset="UTF-8">
+    <title th:text="'前台首页'">首页</title>
+    <link href="webjars/bootstrap/3.0.1/css/bootstrap.min.css" rel="stylesheet">
+</head>
+
+<body>
+<div id="workingArea" class="container">
+    <div class="row clearfix">
+        <div style="margin-top: 60px"></div>
+        <!--导航栏-->
+        <div class="col-md-12 column">
+            <!--顶部导航栏-->
+            <nav class="navbar navbar-default navbar-inverse navbar-fixed-top" role="navigation">
+                <div class="navbar-header">
+                    <button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#bs-example-navbar-collapse-1"> <span class="sr-only">Toggle navigation</span><span class="icon-bar"></span><span class="icon-bar"></span><span class="icon-bar"></span></button> <a class="navbar-brand" href="fore_home" >小萝筐新闻网</a>
+                </div>
+
+                <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
+                    <ul class="nav navbar-nav">
+                        <li v-for="type in types" >
+                            <a href="#" @click="search_type(type.name)">{{type.name}}</a>
+                        </li>
+
+                    </ul>
+                    <form class="navbar-form navbar-left" role="search">
+                        <div class="form-group">
+                            <input type="text" class="form-control" v-model="keyword" />
+                        </div>
+                        <button type="submit" class="btn btn-default" @click="search">搜索</button>
+                    </form>
+                    <!--右上角登陆模块-->
+                    <ul class="nav navbar-nav navbar-right">
+                        <li th:if="${null==session.user}">
+                            <a href="fore_login">请登录</a>
+                        </li>
+                        <li class="dropdown" th:if="${null!=session.user}" >
+                            <a  href="#" class="dropdown-toggle" data-toggle="dropdown" ><span th:text="${session.user.name}"></span><strong class="caret"></strong></a>
+                            <ul class="dropdown-menu">
+                                <li>
+                                    <a href="home" @click="">个人中心</a>
+                                </li>
+                                <li>
+                                    <a href="#" @click="logout">退出</a>
+                                </li>
+                                <!--<li>-->
+                                    <!--<a href="#">Something else here</a>-->
+                                <!--</li>-->
+                                <!--<li class="divider">-->
+                                <!--</li>-->
+                                <!--<li>-->
+                                    <!--<a href="#">Separated link</a>-->
+                                <!--</li>-->
+                            </ul>
+                        </li>
+                    </ul>
+                </div>
+            </nav>
+        </div>
+        <!--轮播显示-->
+        <div class="col-md-12 column">
+            <div class="carousel slide" id="carousel-446425">
+                <ol class="carousel-indicators">
+                    <li class="active" data-slide-to="0" data-target="#carousel-446425">
+                    </li>
+                    <li data-slide-to="1" data-target="#carousel-446425">
+                    </li>
+                    <li data-slide-to="2" data-target="#carousel-446425">
+                    </li>
+                </ol>
+                <div class="carousel-inner">
+                    <div class="item active">
+                        <img alt="" src="http://ibootstrap-file.b0.upaiyun.com/lorempixel.com/1600/500/sports/1/default.jpg" />
+                        <!--<img alt="" src="/img/news/4.jpg" />-->
+                        <div class="carousel-caption">
+                            <h4>
+                                First Thumbnail label
+                            </h4>
+                            <p>
+                                Cras justo odio, dapibus ac facilisis in, egestas eget quam. Donec id elit non mi porta gravida at eget metus. Nullam id dolor id nibh ultricies vehicula ut id elit.
+                            </p>
+                        </div>
+                    </div>
+                    <div class="item">
+                        <img alt="" src="http://ibootstrap-file.b0.upaiyun.com/lorempixel.com/1600/500/sports/2/default.jpg" />
+                        <div class="carousel-caption">
+                            <h4>
+                                Second Thumbnail label
+                            </h4>
+                            <p>
+                                Cras justo odio, dapibus ac facilisis in, egestas eget quam. Donec id elit non mi porta gravida at eget metus. Nullam id dolor id nibh ultricies vehicula ut id elit.
+                            </p>
+                        </div>
+                    </div>
+                    <div class="item">
+                        <img alt="" src="http://ibootstrap-file.b0.upaiyun.com/lorempixel.com/1600/500/sports/3/default.jpg" />
+                        <div class="carousel-caption">
+                            <h4>
+                                Third Thumbnail label
+                            </h4>
+                            <p>
+                                Cras justo odio, dapibus ac facilisis in, egestas eget quam. Donec id elit non mi porta gravida at eget metus. Nullam id dolor id nibh ultricies vehicula ut id elit.
+                            </p>
+                        </div>
+                    </div>
+                </div> <a class="left carousel-control" href="#carousel-446425" data-slide="prev"><span class="glyphicon glyphicon-chevron-left"></span></a> <a class="right carousel-control" href="#carousel-446425" data-slide="next"><span class="glyphicon glyphicon-chevron-right"></span></a>
+            </div>
+        </div>
+        <!--核心内容显示-->
+        <div class="col-md-12 column">
+
+            <!--网页展示-->
+            <div  class="row clearfix">
+                <!--网页新闻展示列表左侧占8个栅格-->
+                <div class="col-md-8 column">
+                    <div class="row clearfix">
+                        <!--新闻列表遍历div-->
+                        <div v-for="bean in beans" class="col-md-12 column">
+                            <br>
+                            <div class="row clearfix">
+                                <div class="col-md-12 column">
+                                    <a >{{bean.note_title}}</a>
+                                </div>
+                            </div>
+                            <div class="row clearfix">
+                                <div class="col-md-12 column">
+                                    <p>新闻副标题</p>
+                                </div>
+                            </div>
+                            <div class="row clearfix">
+                                <div class="col-md-12 column">
+                                    <div class="row clearfix">
+                                        <div class="col-md-8 column">
+                                            <img height="25px" width="25px" alt="25x25"  :src="'img/news/'+(bean.image_url)" class="img-circle" />
+                                            <span> |{{bean.user_write.name}}|{{bean.note_type.name}}|{{bean.refer_time|dateformat}}</span>
+
+                                            <!--<p>新闻发布人头像以及昵称|发布时间</p>-->
+                                        </div>
+                                        <div class="col-md-4 column">
+                                            <p align="right">阅读次数0|评论次数0</p>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <!--分页显示-->
+                    <div th:replace="include/admin/adminPage::html"></div>
+                </div>
+                <!--网页新闻展示列表右侧侧占4个栅格-->
+                <div class="col-md-4 column">
+                </div>
+            </div>
+
+        </div>
+    </div>
+</div>
+<script src="webjars/jquery/2.0.0/jquery.min.js"> </script>
+<script src="webjars/bootstrap/3.0.1/js/bootstrap.min.js"> </script>
+<script src="js/vue/2.5.16/vue.min.js"></script>
+<script src="js/axios/0.17.1/axios.min.js"></script>
+<script src="js/moment/2.22.2/moment.js"></script> <!-- vue.js 格式化日期用的 -->
+<script>
+    /*公有模块*/
+    //跳转函数
+    function jump(page, vue) {
+        if ('first' == page && !vue.pagination.first)
+            vue.list(0);
+
+        else if ('pre' == page && vue.pagination.hasPrevious)
+            vue.list(vue.pagination.number - 1);
+
+        else if ('next' == page && vue.pagination.hasNext)
+            vue.list(vue.pagination.number + 1);
+
+        else if ('last' == page && !vue.pagination.last)
+            vue.list(vue.pagination.totalPages - 1);
+    }
+
+    //跳转函数
+    function jumpByNumber(start, vue) {
+        if (start != vue.pagination.number)
+            vue.list(start);
+    }
+</script>
+<script>
+    /*时间格式化 全局过滤器*/
+    Vue.filter('dateformat', function(dataStr) {
+        return moment(dataStr).format('YYYY-MM-DD HH:mm:ss')
+    })
+    $(function () {
+        /*文档加载开始*/
+
+        var data4Vue = {
+            uri: "new",
+            pagination: {},
+            beans: [],
+            bean: {
+                id: 0, user_write: {realname:""}, refer_time: "", note_type: {id: 0}, note_title: "", note: ""
+                , image_url: "", video_url: "", user_auditor: {realname:""},auditor_time:"", state: "审核通过"
+            },
+            state:"审核通过",
+            types: [],
+            is_search:"",
+            keyword:"",
+            size:"5",
+        };
+
+        //ViewModel
+        var vue = new Vue({
+            el: '#workingArea',
+            data: data4Vue,
+            mounted: function () { //mounted　表示这个 Vue 对象加载成功了
+                /*初始化查询结果*/
+                this.list(0);
+                /*获取所有分类*/
+                this.getNewType();
+            },
+            methods: {
+                list: function (start) {
+                    var url = this.uri+"bystate/"+this.state+"?start=" + start+"&size="+this.size;
+//                    如果是条件查询就访问这个请求
+                    if (this.is_search) {
+                        url = this.uri+"_search/"+this.bean.state+"?keyword=" + this.keyword + "&start=" + start;
+                    }
+                    axios.get(url).then(function (response) {
+                        console.log(response.data);
+                        vue.pagination = response.data.data;
+                        vue.beans = response.data.data.content;
+
+                    });
+                },
+                getNewType: function () {
+                    var url = "type";
+                    axios.get(url).then(function (response) {
+                        vue.types = response.data.data.content;
+                        console.log(vue.types);
+                    })
+                },
+                logout:function () {
+                    var url="logout";
+                    axios.post(url).then(function (response) {
+                        console.log(response.data);
+                        if (response.data.code == 0) location.href = "fore_login";
+                    });
+                },
+                /*搜索框的查询*/
+                search: function () {
+//                    alert(this.keyword);
+                    this.is_search = true;
+                    var url = this.uri + "_search/"+this.bean.state+"?keyword=" + this.keyword;
+                    axios.get(url).then(function (response) {
+                        vue.pagination = response.data.data;
+                        vue.beans = response.data.data.content;
+                    })
+                },
+                /*导航栏查询*/
+                search_type: function (type_name) {
+                    this.keyword=type_name;
+                    this.search();
+                },
+                jump: function (page) {
+                    jump(page, vue); //定义在adminHeader.html 中
+                },
+                jumpByNumber: function (start) {
+                    jumpByNumber(start, vue);
+                }
+            }
+        });
+
+        /*文档加载结束*/
+    });
+</script>
+</body>
+</html>

@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org" >
+<head th:include="include/admin/adminHeader::html('管理员')"></head>
+
+<style>
+    div.container div.row div {
+        margin: 5px 0px;
+
+    }
+
+    div.container div.row div {
+        background-color: lightgray;
+        border: 1px solid gray;
+        text-align: center;
+    }
+</style>
+
+
+<body>
+
+<div id="workingArea">
+    <div class="container">
+        <!--<div th:replace="include/admin/adminNavigator::html"></div>-->
+        <div class="row">
+            <!--栅栏布局12列开始-->
+            <div class="col-xs-12" ><p>欢迎进入校园管理系统后台</p></div>
+
+            <!--栅栏布局3列-->
+            <div th:replace="include/admin/adminLeftMenu::html"></div>
+
+            <!--栅栏布局9列开始-->
+            <div class="col-xs-9 ">
+
+            </div>
+            <!--栅栏布局9列结束-->
+        </div>
+    </div>
+</div>
+
+</body>
+</html>

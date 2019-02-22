@@ -1,0 +1,27 @@
+<div class="navitagorDiv" th:fragment="html" xmlns:th="http://www.w3.org/1999/xhtml">
+
+    <nav class="navbar navbar-default navbar-static-top ">
+        <!--<img style="margin-left:10px;margin-right:0px" class="pull-left" src="img/site/tmallbuy.png" height="45px">-->
+        <a class="navbar-brand" href="#nowhere">托管后台</a>
+
+        <span th:if="${session.role}">
+            <a class="navbar-brand" href="admin_home">管理员管理</a>
+            </span>
+        <a class="navbar-brand" href="admin_teacher_list">老师管理</a>
+        <a class="navbar-brand" href="admin_parent_list">家长管理</a>
+        <a class="navbar-brand" href="admin_kid_list">孩子管理</a>
+        <a class="navbar-brand" href="admin_class_list">教室管理</a>
+        <a class="navbar-brand" href="">网站维护</a>
+        <div style="float:right;">
+            <span th:if="${null!=session.user}">
+                <a class="navbar-brand" th:href="'admin_edit?id='+${session.user.id}"
+                   th:text="${session.user.name}"></a>
+                <p class="navbar-brand" style="float: right" th:text="${session.role}"></p>
+                <a style="float: right" class="navbar-brand" href="admin_logout">
+                    <span class="glyphicon glyphicon-log-in"></span></a>
+             </span>
+        </div>
+
+    </nav>
+</div>
+

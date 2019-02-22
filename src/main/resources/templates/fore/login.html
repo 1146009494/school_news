@@ -1,0 +1,105 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>前台登陆</title>
+    <script src="webjars/jquery/2.0.0/jquery.min.js"> </script>
+    <link href="webjars/bootstrap/3.0.1/css/bootstrap.min.css" rel="stylesheet">
+    <script src="webjars/bootstrap/3.0.1/js/bootstrap.min.js"> </script>
+    <script src="js/vue/2.5.16/vue.min.js"></script>
+    <script src="js/axios/0.17.1/axios.min.js"></script>
+    <script src="js/moment/2.22.2/moment.js"></script> <!-- vue.js 格式化日期用的 -->
+</head>
+<script>
+    $(document).ready(function () {
+//        $('#clickmewow').click(function () {
+//            $('#radio1003').attr('checked', 'checked');
+//        });
+
+        var data4Vue = {
+            uri: "user",
+            bean: {id: "", name: "", password: "", realname: "", phone: "", role: ""}
+        };
+
+        var vue = new Vue({
+            el: '#workingArea',
+            data: data4Vue,
+            mounted: function () {
+
+            },
+            methods: {
+                login: function () {
+                    var url = "fore_loginPage";
+                    var formdata = new FormData();
+                    formdata.append("name", this.bean.name);
+                    formdata.append("password", this.bean.password);
+                    axios.post(url, formdata).then(function (response) {
+                        console.log(response.data);
+                        if (response.data.code == 0) location.href = "fore_home";
+                        else {
+                            alert(response.data.message);
+
+//                            location.href="test";
+                        }
+                    })
+                },
+                register:function () {
+                    location.href="fore_register";
+                }
+
+            }
+        });
+    });
+</script>
+<body>
+<div class="container" id="workingArea">
+    <div class="row clearfix">
+        <div class="col-md-12 column">
+            <div class="row clearfix">
+                <div class="col-md-12 column">
+                    <h3 class="text-center text-info">
+                        登陆页
+                    </h3>
+                </div>
+            </div>
+            <div class="row clearfix">
+                <div class="col-md-3 column">
+                </div>
+                <div class="col-md-6 column">
+                    <form class="form-horizontal" role="form">
+                        <div class="form-group">
+                            <label for="inputEmail3" class="col-sm-2 control-label">用户名：</label>
+                            <div class="col-sm-10">
+                                <input type="email" class="form-control" id="inputEmail3" v-model="bean.name"/>
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label for="inputPassword3" class="col-sm-2 control-label">密码：</label>
+                            <div class="col-sm-10">
+                                <input type="password" class="form-control" id="inputPassword3" v-model="bean.password" />
+                            </div>
+                        </div>
+                        <!--<div class="form-group">-->
+                            <!--<div class="col-sm-offset-2 col-sm-10">-->
+                                <!--<div class="checkbox">-->
+                                    <!--<label><input type="checkbox" />Remember me</label>-->
+                                    <!--<a href="fore_register" >forgot Password?</a>-->
+                                <!--</div>-->
+                            <!--</div>-->
+                        <!--</div>-->
+                        <div class="form-group">
+                            <div class="col-sm-offset-2 col-sm-10">
+                                <button  class="btn btn-default" @click="login">登陆</button>
+                                <a  class="btn btn-default"  @click="register">注册</a>
+                            </div>
+                        </div>
+                    </form>
+                </div>
+                <div class="col-md-3 column">
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+</body>
+</html>

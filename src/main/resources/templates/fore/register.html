@@ -1,0 +1,144 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>注册页</title>
+    <script src="webjars/jquery/2.0.0/jquery.min.js"> </script>
+    <link href="webjars/bootstrap/3.0.1/css/bootstrap.min.css" rel="stylesheet">
+    <script src="webjars/bootstrap/3.0.1/js/bootstrap.min.js"> </script>
+    <script src="js/vue/2.5.16/vue.min.js"></script>
+    <script src="js/axios/0.17.1/axios.min.js"></script>
+    <script src="js/moment/2.22.2/moment.js"></script> <!-- vue.js 格式化日期用的 -->
+</head>
+<script>
+    $(document).ready(function () {
+//        $('#clickmewow').click(function () {
+//            $('#radio1003').attr('checked', 'checked');
+//        });
+
+        var data4Vue = {
+            uri: "user",
+            bean: {id: "", name: "", password: "", realname: "", phone: "", role: "新闻投稿员"},
+            is_have_name:false
+        };
+
+        var vue = new Vue({
+            el: '#workingArea',
+            data: data4Vue,
+            mounted: function () {
+
+            },
+            methods: {
+                login: function () {
+                    var url = "fore_loginPage";
+                    var formdata = new FormData();
+                    formdata.append("name", this.bean.name);
+                    formdata.append("password", this.bean.password);
+                    axios.post(url, formdata).then(function (response) {
+                        console.log(response.data);
+                        if (response.data.code == 0) location.href = "fore_home";
+                        else {
+                            alert(response.data.message);
+
+//                            location.href="test";
+                        }
+                    })
+                },
+                /*注册信息*/
+                register:function () {
+                    if(this.is_have_name){
+                        alert("信息输入有误")
+                    }
+                    else{
+                        var formData = new FormData();
+                        formData.append("name", this.bean.name);
+                        formData.append("password", this.bean.password);
+                        formData.append("realname", this.bean.realname);
+                        formData.append("phone", this.bean.phone);
+                        formData.append("role",this.bean.role);
+                        axios.post(this.uri,formData).then(function (response) {
+                            if(response.data.code)
+                            {
+                                /*注册失败*/
+                            }else
+                            {
+                                /*注册成功*/
+                                alert("注册成功");
+                            }
+                        })
+                    }
+                },
+                check:function (bean_name) {
+                    var url=this.uri+"/"+bean_name;
+//                    alert(url);
+                    axios.get(url).then(function (response) {
+                        console.log(response);
+                        if(response.data.code){
+                            /*用户名不存在*/
+                            vue.is_have_name=false;
+                        }
+                        else {
+                            /*用户名已存在*/
+                            vue.is_have_name=true;
+                        }
+                    })
+                }
+
+            }
+        });
+    });
+</script>
+<body>
+<div class="container" id="workingArea">
+    <div class="row clearfix">
+        <div class="col-md-12 column">
+            <div class="row clearfix">
+                <div class="col-md-12 column">
+                    <h3 class="text-center text-info">
+                        注册页
+                    </h3>
+                </div>
+            </div>
+            <div class="row clearfix">
+                <div class="col-md-3 column">
+                </div>
+                <div class="col-md-6 column">
+                    <form class="form-horizontal" role="form">
+                        <div class="form-group">
+                            <label for="inputEmail3" class="col-sm-2 control-label">用户名：</label>
+                            <div class="col-sm-10">
+                                <input type="email" class="form-control" id="inputEmail3" @blur="check(bean.name)" v-model="bean.name"/>
+                                <span v-if="is_have_name">用户名已存在</span>
+                                <span v-else></span>
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label for="inputPassword3" class="col-sm-2 control-label">密码：</label>
+                            <div class="col-sm-10">
+                                <input type="password" class="form-control" id="inputPassword3" v-model="bean.password" />
+                            </div>
+                        </div>
+                        <!--<div class="form-group">-->
+                        <!--<div class="col-sm-offset-2 col-sm-10">-->
+                        <!--<div class="checkbox">-->
+                        <!--<label><input type="checkbox" />Remember me</label>-->
+                        <!--<a href="fore_register" >forgot Password?</a>-->
+                        <!--</div>-->
+                        <!--</div>-->
+                        <!--</div>-->
+                        <div class="form-group">
+                            <div class="col-sm-offset-2 col-sm-10">
+                                <a  class="btn btn-default"  @click="register">注册</a>
+                                <a  class="btn btn-default" href="fore_login">返回登陆</a>
+                            </div>
+                        </div>
+                    </form>
+                </div>
+                <div class="col-md-3 column">
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+</body>
+</html>

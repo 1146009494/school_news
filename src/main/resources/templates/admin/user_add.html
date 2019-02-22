@@ -1,0 +1,112 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head th:include="include/admin/adminHeader::html('管理员')"></head>
+
+<style>
+    div.container div.row div {
+        margin: 5px 0px;
+
+    }
+
+    div.container div.row div {
+        background-color: lightgray;
+        border: 1px solid gray;
+        text-align: center;
+    }
+</style>
+
+<script type="text/javascript">
+        $(function () {
+            /*文档加载开始*/
+            var data4Vue = {
+                uri: "user",
+                bean: {id: "", name: "", password: "",realname:"",phone:"",role:""}
+            };
+
+            //ViewModel
+            var vue = new Vue({
+                el: '#workingArea',
+                data: data4Vue,
+                methods: {
+                    add: function () {
+                        var url = this.uri;
+                        var formData = new FormData();
+                        formData.append("name", this.bean.name);
+                        formData.append("password", this.bean.password);
+                        formData.append("realname", this.bean.realname);
+                        formData.append("phone", this.bean.phone);
+                        formData.append("role",this.bean.role);
+                        axios.post(url, formData).then(function (response) {
+                            console.log(response.data);
+                            if(response.data.code!=0){
+                                alert("增加失败");
+                            }else{
+                                alert("增加成功");
+                                this.bean = {id: "", name: "", password: "",realname:"",phone:"",role:""};
+                            }
+                        });
+                    }
+                }
+            });
+        });
+
+
+    </script>
+
+<body>
+<div id="workingArea">
+    <div class="container">
+        <div class="row">
+            <!--栅栏布局12列开始-->
+            <div class="col-xs-12"><p>欢迎进入校园管理系统后台</p></div>
+
+            <!--栅栏布局3列-->
+            <div th:replace="include/admin/adminLeftMenu::html"></div>
+
+            <!--栅栏布局9列开始-->
+            <div class="col-xs-9 ">
+                <div>
+                    <form style="width: 300px;margin: auto">
+                        <table>
+                            <tr>
+                                <td>用户名：</td>
+                                <td><input v-model="bean.name"></td>
+                            </tr>
+                            <tr>
+                                <td>密&nbsp码 ：</td>
+                                <td><input v-model="bean.password"></td>
+                            </tr>
+                            <tr>
+                                <td>真实姓名 ：</td>
+                                <td><input v-model="bean.realname"></td>
+                            </tr>
+                            <tr>
+                                <td>联系方式：</td>
+                                <td><input v-model="bean.phone"></td>
+                            </tr>
+
+                            <tr>
+                                <td>角色：</td>
+                                <td><select v-model="bean.role">
+                                    <option>管理员</option>
+                                    <option>新闻投稿员</option>
+                                    <option>新闻审核员</option>
+                                </select>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td colspan="2" align="center">
+                                    <button class="btn btn-primary" type="button" @click="add">增加</button>
+                                </td>
+                            </tr>
+                        </table>
+                    </form>
+                </div>
+            </div>
+            <!--栅栏布局9列结束-->
+        </div>
+    </div>
+</div>
+
+</body>
+</html>
