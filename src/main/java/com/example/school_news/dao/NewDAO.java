@@ -1,7 +1,6 @@
 package com.example.school_news.dao;
 
 import com.example.school_news.pojo.New;
-import com.example.school_news.pojo.User;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
@@ -21,6 +20,6 @@ public interface NewDAO extends JpaRepository<New,Integer> {
             "n.state=?2)")
     Page<New> findByAllLike(String keyword,String state, Pageable pageable);
 
-//    Page<New> findByUser_write(User user_write, Pageable pageable);
+//    Page<New> findByUserwrite(int user_write, Pageable pageable);
 
 }
