@@ -22,4 +22,8 @@ public interface NewDAO extends JpaRepository<New,Integer> {
 
 //    Page<New> findByUserwrite(int user_write, Pageable pageable);
 
+
+
+
+
 }
