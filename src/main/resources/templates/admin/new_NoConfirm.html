@@ -25,8 +25,8 @@
             pagination: {},
             beans: [],
             bean: {
-                id: 0, user_write: "", refer_time: "", note_type: {id: 0}, note_title: "", note: ""
-                , image_url: "", video_url: "", user_auditor: {id:0}, auditor_time: "", state: "未审核"
+                id: 0, user_write: {id:0,realname: ""}, refer_time: "", note_type: {id: 0}, note_title: "", note: ""
+                , image_url: "", video_url: "", user_read: {realname: ""}, auditor_time: "", state: "未审核"
             },
             keyword: "",
             is_search: "",
@@ -44,7 +44,7 @@
             methods: {
                 /*获取审核人信息*/
                 getUser:function () {
-                  this.bean.user_auditor.id=[[${session.user.id}]];
+                  this.bean.user_read.id=[[${session.user.id}]];
                 },
                 list: function (start) {
                     var url = this.uri + "bystate/" + this.bean.state + "?start=" + start;
@@ -62,7 +62,7 @@
                 confirm: function (id) {
                     if (!confirm("确认审核通过"))
                         return;
-                    var url = this.uri + "/" + id + "/审核通过"+"/"+this.bean.user_auditor.id;
+                    var url = this.uri + "/" + id + "/审核通过/"+this.bean.user_read.id;
                     axios.put(url).then(function (response) {
                         vue.list(0);
                     })
@@ -70,7 +70,7 @@
                 refuse: function (id) {
                     if (!confirm("确认审核不通过"))
                         return;
-                    var url = this.uri + "/" + id + "/审核不通过";
+                    var url = this.uri + "/" + id + "/审核不通过/"+this.bean.user_read.id;
                     axios.put(url).then(function (response) {
                         vue.list(0);
                     })
@@ -81,6 +81,7 @@
                 search: function () {
                     this.is_search = true;
                     var url = this.uri + "_search/" + this.bean.state + "?keyword=" + this.keyword;
+                    alert(url);
                     axios.get(url).then(function (response) {
                         vue.pagination = response.data.data;
                         vue.beans = response.data.data.content;
@@ -155,11 +156,13 @@
                                 <td>{{bean.note_title}}</td>
                                 <td>{{bean.note}}</td>
                                 <td>{{bean.note_type.name}}</td>
-                                <td><img height="50px" :src="'img/news/'+bean.image_url"></td>
-                                <td>
+                                <td v-if="null!=bean.image_url"><img height="50px" :src="'img/news/'+bean.image_url"></td>
+                                <td v-else>无</td>
+                                <td v-if="null!=bean.video_url">
                                     <a href="#nowhere" @click="getVideoUrl(bean.video_url)" data-toggle="modal" data-target="#myModal">
                                         <span class="glyphicon glyphicon-list"></span></a>
                                 </td>
+                                <td v-else>无</td>
                                 <td><a href="#nowhere" @click="confirm(bean.id)">
                                     <span class="glyphicon glyphicon-ok"></span></a></td>
                                 <td><a href="#nowhere" @click="refuse(bean.id)">

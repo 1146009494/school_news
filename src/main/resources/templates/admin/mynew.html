@@ -2,7 +2,18 @@
 <html lang="en" xmlns:th="http://www.thymeleaf.org">
 <head th:include="include/admin/adminHeader::html('管理员')"></head>
 
+<style>
+    div.container div.row div {
+        margin: 5px 0px;
 
+    }
+
+    div.container div.row div {
+        background-color: lightgray;
+        /*border: 1px solid gray;*/
+        text-align: center;
+    }
+</style>
 <script type="text/javascript">
     $(function () {
         /*时间格式化*/
@@ -17,7 +28,7 @@
             beans: [],
             bean: {
                 id: 0, user_write: {id:0,realname:""}, refer_time: "", note_type: {id: 0}, note_title: "", note: ""
-                , image_url: "", video_url: "", user_auditor: {realname:""},auditor_time:"", state: "审核通过"
+                , image_url: "", video_url: "", user_read: {realname:""},auditor_time:"", state: ""
             },
             keyword: "",
             is_search: "",
@@ -38,8 +49,11 @@
                     this.bean.user_write.id=parseInt([[${session.user.id}]]);
                 },
                 list: function (start) {
-                    alert(1);
-                    var url=this.uri+"?user_write_id="+this.bean.user_write.id;
+//                    alert(1);
+                    var url=this.uri+"?user_write_id="+this.bean.user_write.id+"&start="+start;
+                    if(this.is_search)
+                        url = this.uri + "_search"+"?keyword=" + this.keyword+"&user_write_id="+this.bean.user_write.id+"&start="+start;
+
                     axios.get(url).then(function (response) {
                         console.log(response.data);
                         vue.pagination = response.data.data;
@@ -49,8 +63,9 @@
                 },
                 search: function () {
                     this.is_search = true;
-                    var url = this.uri + "_search/"+this.bean.state+"?keyword=" + this.keyword;
+                    var url = this.uri + "_search"+"?keyword=" + this.keyword+"&user_write_id="+this.bean.user_write.id;
                     axios.get(url).then(function (response) {
+                        console.log(response.data);
                         vue.pagination = response.data.data;
                         vue.beans = response.data.data.content;
                     })
@@ -96,7 +111,7 @@
                     <!--搜索框开始-->
                     <!--<div class="container">-->
                     <div class="input-group">
-                        <input type="text" v-model="keyword" class="form-control input-md">
+                        <input type="text" v-model="keyword" class="form-control input-md" placeholder="暂不支持对审核人进行查找">
                         <span @click="search" class="input-group-addon btn btn-primary">搜索</span>
                         <span @click="all" class="input-group-addon btn btn-primary" th:text="显示全部"></span>
                     </div>
@@ -132,13 +147,17 @@
                                 <td>{{bean.note_title}}</td>
                                 <td>{{bean.note}}</td>
                                 <td>{{bean.note_type.name}}</td>
-                                <td><img height="50px" :src="'img/news/'+bean.image_url"></td>
-                                <td>
+                                <td v-if="null!=bean.image_url"><img height="50px" :src="'img/news/'+bean.image_url"></td>
+                                <td v-else>无</td>
+                                <td v-if="null!=bean.video_url">
                                     <a href="#nowhere" @click="getVideoUrl(bean.video_url)" data-toggle="modal" data-target="#myModal">
                                         <span class="glyphicon glyphicon-list"></span></a>
                                 </td>
-                                <td>{{bean.user_read.realname}}</td>
-                                <td>{{bean.auditor_time|dateformat}}</td>
+                                <td v-else>无</td>
+                                <td v-if="null!=bean.user_read">{{bean.user_read.realname}}</td>
+                                <td v-else>未审核</td>
+                                <td v-if="null!=bean.auditor_time">{{bean.auditor_time|dateformat}}</td>
+                                <td v-else>null</td>
                                 <!--<td><a href="#nowhere" @click="deleteBean(bean.id)">-->
                                 <!--<span class="glyphicon glyphicon-trash"></span></a></td>-->
                                 <!--<td><a href="#nowhere" @click="getBean(bean.id)" data-toggle="modal" data-target="#myModal">-->
@@ -153,37 +172,37 @@
                     <!--分页显示-->
                     <div th:replace="include/admin/adminPage::html"></div>
 
-                    <!--<div class="modal fade" id="myModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">-->
-                        <!--<div class="modal-dialog">-->
-                            <!--<div class="modal-content">-->
-                                <!--<div class="modal-header">-->
-                                    <!--<button data-dismiss="modal" class="close" type="button"><span aria-hidden="true">×</span><span-->
-                                            <!--class="sr-only">Close</span></button>-->
-                                    <!--<h4 class="modal-title" >{{video_url}}</h4>-->
-                                    <!--<video height="600px" width="600px" :src="'video/news/'+video_url" controls preload="auto">-->
-                                    <!--</video>-->
-                                <!--</div>-->
-                                <!--&lt;!&ndash;<div class="modal-body">&ndash;&gt;-->
-                                <!--&lt;!&ndash;&lt;!&ndash;<p>编辑信息</p>&ndash;&gt;&ndash;&gt;-->
-                                <!--&lt;!&ndash;<form>&ndash;&gt;-->
-                                <!--&lt;!&ndash;用户名：<input v-model="bean_modify.name" name="name" class="form-control" placeholder="请输入用户名">&ndash;&gt;-->
-                                <!--&lt;!&ndash;<br>&ndash;&gt;-->
-                                <!--&lt;!&ndash;密&nbsp码：<input v-model="bean_modify.password" name="password" class="form-control"&ndash;&gt;-->
-                                <!--&lt;!&ndash;placeholder="请输入密码">&ndash;&gt;-->
-                                <!--&lt;!&ndash;<br>&ndash;&gt;-->
-                                <!--&lt;!&ndash;修改图片：<input type="file" @change="getFile($event)"/>&ndash;&gt;-->
-                                <!--&lt;!&ndash;&lt;!&ndash;<div align="center"><a href="#" @click="" >更新</a></div>&ndash;&gt;&ndash;&gt;-->
+                    <div class="modal fade" id="myModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
+                        <div class="modal-dialog">
+                            <div class="modal-content">
+                                <div class="modal-header">
+                                    <button data-dismiss="modal" class="close" type="button"><span aria-hidden="true">×</span><span
+                                            class="sr-only">Close</span></button>
+                                    <h4 class="modal-title" >{{video_url}}</h4>
+                                    <video v-if="null!=bean.video_url" height="600px" width="600px" :src="'video/news/'+video_url" controls preload="auto">
+                                    </video>
+                                </div>
+                                <!--<div class="modal-body">-->
+                                <!--&lt;!&ndash;<p>编辑信息</p>&ndash;&gt;-->
+                                <!--<form>-->
+                                <!--用户名：<input v-model="bean_modify.name" name="name" class="form-control" placeholder="请输入用户名">-->
+                                <!--<br>-->
+                                <!--密&nbsp码：<input v-model="bean_modify.password" name="password" class="form-control"-->
+                                <!--placeholder="请输入密码">-->
+                                <!--<br>-->
+                                <!--修改图片：<input type="file" @change="getFile($event)"/>-->
+                                <!--&lt;!&ndash;<div align="center"><a href="#" @click="" >更新</a></div>&ndash;&gt;-->
 
-                                <!--&lt;!&ndash;&lt;!&ndash;<input type="submit" @click="update" value="更新">&ndash;&gt;&ndash;&gt;-->
-                                <!--&lt;!&ndash;</form>&ndash;&gt;-->
-                                <!--&lt;!&ndash;</div>&ndash;&gt;-->
-                                <!--&lt;!&ndash;<div class="modal-footer">&ndash;&gt;-->
-                                <!--&lt;!&ndash;<button data-dismiss="modal" class="btn btn-default" type="button">关闭</button>&ndash;&gt;-->
-                                <!--&lt;!&ndash;<button data-dismiss="modal" class="btn btn-primary" type="button" @click="update">提交修改</button>&ndash;&gt;-->
-                                <!--&lt;!&ndash;</div>&ndash;&gt;-->
-                            <!--</div>&lt;!&ndash; /.modal-content &ndash;&gt;-->
-                        <!--</div>&lt;!&ndash; /.modal-dialog &ndash;&gt;-->
-                    <!--</div>-->
+                                <!--&lt;!&ndash;<input type="submit" @click="update" value="更新">&ndash;&gt;-->
+                                <!--</form>-->
+                                <!--</div>-->
+                                <!--<div class="modal-footer">-->
+                                <!--<button data-dismiss="modal" class="btn btn-default" type="button">关闭</button>-->
+                                <!--<button data-dismiss="modal" class="btn btn-primary" type="button" @click="update">提交修改</button>-->
+                                <!--</div>-->
+                            </div><!-- /.modal-content -->
+                        </div><!-- /.modal-dialog -->
+                    </div>
                 </div>
                 <!--栅栏布局9列结束-->
 

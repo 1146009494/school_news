@@ -7,6 +7,7 @@
         margin: 5px 0px;
 
     }
+
     div.container div.row div {
         background-color: lightgray;
         border: 1px solid gray;
@@ -17,7 +18,7 @@
 <script type="text/javascript">
     $(function () {
         /*时间格式化*/
-        Vue.filter('dateformat', function(dataStr) {
+        Vue.filter('dateformat', function (dataStr) {
             return moment(dataStr).format('YYYY-MM-DD HH:mm:ss')
         });
 
@@ -27,12 +28,12 @@
             pagination: {},
             beans: [],
             bean: {
-                id: 0, user_write: {realname:""}, refer_time: "", note_type: {id: 0}, note_title: "", note: ""
-                , image_url: "", video_url: "", user_auditor: {realname:""},auditor_time:"", state: "审核通过"
+                id: 0, user_write: {realname: ""}, refer_time: "", note_type: {id: 0}, note_title: "", note: ""
+                , image_url: "", video_url: "", user_read: {realname: ""}, auditor_time: "", state: "审核通过"
             },
             keyword: "",
             is_search: "",
-            video_url:""
+            video_url: ""
         };
 
 
@@ -45,10 +46,10 @@
             },
             methods: {
                 list: function (start) {
-                    var url = this.uri+"bystate/"+this.bean.state+"?start=" + start;
+                    var url = this.uri + "bystate/" + this.bean.state + "?start=" + start;
 //                    如果是条件查询就访问这个请求
                     if (this.is_search) {
-                        url = this.uri+"_search/"+this.bean.state+"?keyword=" + this.keyword + "&start=" + start;
+                        url = this.uri + "_search/" + this.bean.state + "?keyword=" + this.keyword + "&start=" + start;
                     }
 
                     axios.get(url).then(function (response) {
@@ -60,7 +61,8 @@
                 },
                 search: function () {
                     this.is_search = true;
-                    var url = this.uri + "_search/"+this.bean.state+"?keyword=" + this.keyword;
+                    var url = this.uri + "_search/" + this.bean.state + "?keyword=" + this.keyword;
+                    alert(url);
                     axios.get(url).then(function (response) {
                         vue.pagination = response.data.data;
                         vue.beans = response.data.data.content;
@@ -70,8 +72,8 @@
                     this.is_search = false;
                     this.list(0);
                 },
-                getVideoUrl:function (video_url) {
-                    this.video_url=video_url;
+                getVideoUrl: function (video_url) {
+                    this.video_url = video_url;
                 },
                 jump: function (page) {
                     jump(page, vue); //定义在adminHeader.html 中
@@ -98,7 +100,6 @@
 
                 <!--栅栏布局3列-->
                 <div th:replace="include/admin/adminLeftMenu::html"></div>
-
 
 
                 <!--栅栏布局9列开始-->
@@ -143,17 +144,23 @@
                                 <td>{{bean.note_title}}</td>
                                 <td>{{bean.note}}</td>
                                 <td>{{bean.note_type.name}}</td>
-                                <td><img height="50px" :src="'img/news/'+bean.image_url"></td>
-                                <td>
-                                    <a href="#nowhere" @click="getVideoUrl(bean.video_url)" data-toggle="modal" data-target="#myModal">
+                                <td v-if="null!=bean.image_url"><img height="50px" :src="'img/news/'+bean.image_url">
+                                </td>
+                                <td v-else>无</td>
+                                <td v-if="null!=bean.video_url">
+                                    <a href="#nowhere" @click="getVideoUrl(bean.video_url)" data-toggle="modal"
+                                       data-target="#myModal">
                                         <span class="glyphicon glyphicon-list"></span></a>
                                 </td>
-                                <td>{{bean.user_read.realname}}</td>
-                                <td>{{bean.auditor_time|dateformat}}</td>
+                                <td v-else>无</td>
+                                <td v-if="null!=bean.user_read">{{bean.user_read.realname}}</td>
+                                <td v-else>未审核</td>
+                                <td v-if="null!=bean.auditor_time">{{bean.auditor_time|dateformat}}</td>
+                                <td v-else>null</td>
                                 <!--<td><a href="#nowhere" @click="deleteBean(bean.id)">-->
-                                    <!--<span class="glyphicon glyphicon-trash"></span></a></td>-->
+                                <!--<span class="glyphicon glyphicon-trash"></span></a></td>-->
                                 <!--<td><a href="#nowhere" @click="getBean(bean.id)" data-toggle="modal" data-target="#myModal">-->
-                                    <!--<span class="glyphicon glyphicon-edit"></span></a>-->
+                                <!--<span class="glyphicon glyphicon-edit"></span></a>-->
                                 <!--</td>-->
                             </tr>
                             </tbody>
@@ -168,10 +175,12 @@
                         <div class="modal-dialog">
                             <div class="modal-content">
                                 <div class="modal-header">
-                                    <button data-dismiss="modal" class="close" type="button"><span aria-hidden="true">×</span><span
+                                    <button data-dismiss="modal" class="close" type="button"><span
+                                            aria-hidden="true">×</span><span
                                             class="sr-only">Close</span></button>
-                                    <h4 class="modal-title" >{{video_url}}</h4>
-                                    <video height="600px" width="600px" :src="'video/news/'+video_url" controls preload="auto">
+                                    <h4 class="modal-title">{{video_url}}</h4>
+                                    <video height="600px" width="600px" :src="'video/news/'+video_url" controls
+                                           preload="auto">
                                     </video>
                                 </div>
                                 <!--<div class="modal-body">-->

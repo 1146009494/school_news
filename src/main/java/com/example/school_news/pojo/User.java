@@ -11,12 +11,12 @@ public class User {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "id")
-    int id;
-    String name;
-    String password;
-    String realname;
-    String phone;
-    String role;
+    private int id;
+    private String name;
+    private String password;
+    private String realname;
+    private String phone;
+    private String role;
 
     public int getId() {
         return id;
