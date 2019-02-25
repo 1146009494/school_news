@@ -17,7 +17,7 @@
 //        });
 
         var data4Vue = {
-            uri: "user",
+            uri: "userbyname",
             bean: {id: "", name: "", password: "", realname: "", phone: "", role: "新闻投稿员"},
             is_have_name:false
         };
@@ -105,9 +105,9 @@
                 <div class="col-md-6 column">
                     <form class="form-horizontal" role="form">
                         <div class="form-group">
-                            <label for="inputEmail3" class="col-sm-2 control-label">用户名：</label>
+                            <label class="col-sm-2 control-label">用户名：</label>
                             <div class="col-sm-10">
-                                <input type="email" class="form-control" id="inputEmail3" @blur="check(bean.name)" v-model="bean.name"/>
+                                <input  class="form-control"  @blur="check(bean.name)" v-model="bean.name"/>
                                 <span v-if="is_have_name">用户名已存在</span>
                                 <span v-else></span>
                             </div>
@@ -116,6 +116,12 @@
                             <label for="inputPassword3" class="col-sm-2 control-label">密码：</label>
                             <div class="col-sm-10">
                                 <input type="password" class="form-control" id="inputPassword3" v-model="bean.password" />
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label  class="col-sm-2 control-label">角色：</label>
+                            <div class="col-sm-10">
+                                <input type="role" class="form-control" disabled="disabled" v-model="bean.role" />
                             </div>
                         </div>
                         <!--<div class="form-group">-->

@@ -57,15 +57,18 @@ public class NewController {
      * @param start 起始页
      * @param size  页大小
      * @param state 提交的已审核通过的新闻状态
+     * @param user_read_id 审核人id
      * @return 结果集
      * @throws Exception
      */
     @GetMapping("/newbystate/{state}")
     public Object listByState(@RequestParam(value = "start", defaultValue = "0") int start,
                               @RequestParam(value = "size", defaultValue = "5") int size,
-                              @PathVariable("state") String state) throws Exception {
+                              @PathVariable("state") String state,
+                              @RequestParam(value = "user_read_id", defaultValue = "0") int user_read_id) throws Exception {
         start = start < 0 ? 0 : start;
-        Page4Navigator<New> page = newService.listByState(start, size, 5, state);  //5表示导航分页最多有5个，像 [1,2,3,4,5] 这样
+        Page4Navigator<New> page;
+        page = newService.listByStateAndUserReadId(start, size, 5, state,user_read_id);  //5表示导航分页最多有5个，像 [1,2,3,4,5] 这样
         return Result.success(page);
     }
 
@@ -82,7 +85,7 @@ public class NewController {
     @GetMapping("/new_search/{state}")
     public Object listByStateAndSearch(@RequestParam(value = "start", defaultValue = "0") int start,
                                        @RequestParam(value = "size", defaultValue = "5") int size,
-                                       @PathVariable("state" ) String state,
+                                       @PathVariable("state") String state,
                                        @RequestParam(value = "keyword") String keyword) throws Exception {
         start = start < 0 ? 0 : start;
         Page4Navigator<New> page = newService.listByAllLikeAndState(start, size, 5, keyword, state);  //5表示导航分页最多有5个，像 [1,2,3,4,5] 这样
@@ -91,9 +94,10 @@ public class NewController {
 
     /**
      * 模糊查询个人发布的新闻信息
-     * @param start 起始页
-     * @param size  页数
-     * @param keyword 关键字
+     *
+     * @param start         起始页
+     * @param size          页数
+     * @param keyword       关键字
      * @param user_write_id 用户id
      * @return 返回查询结果
      * @throws Exception
@@ -104,12 +108,13 @@ public class NewController {
                                               @RequestParam(value = "keyword") String keyword,
                                               @RequestParam(value = "user_write_id") int user_write_id) throws Exception {
         start = start < 0 ? 0 : start;
-        Page4Navigator<New> page = newService.listByAllLikeAndUser(start, size, 5, keyword,user_write_id);  //5表示导航分页最多有5个，像 [1,2,3,4,5] 这样
+        Page4Navigator<New> page = newService.listByAllLikeAndUser(start, size, 5, keyword, user_write_id);  //5表示导航分页最多有5个，像 [1,2,3,4,5] 这样
         return Result.success(page);
     }
 
     /**
      * 新增一条新闻
+     *
      * @param bean  新闻的一些基本信息
      * @param files 文件数组，存放新闻相关的文件（图片 和视频）
      * @return 增加操作的反馈

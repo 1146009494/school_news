@@ -63,14 +63,14 @@ public class UserController {
         User bean = userService.get(id);
         return Result.success(bean);
     }
-//    /*跟据用户名查找数据*/
-//    @GetMapping("/user/{name}")
-//    public Object getByName(@PathVariable("name") String name) throws Exception {
-//        if(userService.get(name))
-//        return Result.success();
-//        else
-//            return Result.fail("用户名可用");
-//    }
+    /*跟据用户名查找数据*/
+    @GetMapping("/userbyname/{name}")
+    public Object getByName(@PathVariable("name") String name) throws Exception {
+        if(userService.get(name))
+            return Result.success();
+        else
+            return Result.fail("用户名可用");
+    }
 
     @PutMapping("user/{id}")
     public void update(User bean) throws Exception {

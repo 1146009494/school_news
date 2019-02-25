@@ -44,5 +44,7 @@ public interface NewDAO extends JpaRepository<New, Integer> {
             "n.user_write.id=?2 )")
     Page<New> findByAllLikeAndUser(String keyword, int user_write_id, Pageable pageable);
 
+    @Query("select n from New n where n.user_read.id=?1")
+    Page<New> findByUserReadId(int user_read_id, Pageable pageable);
 //    Page<New> findByUser_writeLikeAndAndNoteLike(User user,String note,Pageable pageable);
 }

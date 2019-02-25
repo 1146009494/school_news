@@ -26,6 +26,10 @@ public class MyWebMvc extends WebMvcConfigurerAdapter {
         registry.addViewController("/user_info").setViewName("admin/user_info");
         /*个人新闻管理模块*/
         registry.addViewController("/mynew").setViewName("admin/mynew");
+
+        /*新闻审核员模块*/
+        registry.addViewController("/myconfirm").setViewName("admin/myconfirm");
+
         /*用户管理模块*/
         registry.addViewController("/user_add").setViewName("admin/user_add");
         registry.addViewController("/user_write").setViewName("admin/user_write");

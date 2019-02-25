@@ -7,18 +7,30 @@
 
 
         </li>
+        <!--每一个用户都有的模块-->
         <li role="presentation">
-
             <a href="user_info">个人信息管理</a>
-
         </li>
-        <li role="presentation" class="dropdown">
+
+        <!--用户级别：除了管理员都有-->
+        <li role="presentation" class="dropdown" th:if="'管理员'!=${session.user.role}">
             <a href="#" class="dropdown-toggle" data-toggle="dropdown">个人新闻管理<span class="caret"></span></a>
             <ul class="dropdown-menu">
                 <li><a href="new_add">发布新闻</a></li>
                 <li><a href="mynew">我的发布</a></li>
             </ul>
+        </li>
 
+        <!--模块用户：新闻审核员-->
+        <li role="presentation" class="dropdown"  th:if="${'新闻审核员'==session.user.role}">
+            <a href="#" class="dropdown-toggle" data-toggle="dropdown">新闻审核管理<span class="caret"></span></a>
+            <ul class="dropdown-menu">
+                <li><a href="new_NoConfirm">待审核新闻</a></li>
+                <li><a href="myconfirm">我的审核</a></li>
+            </ul>
+        </li>
+
+        <!--模块用户：管理员-->
         <li role="presentation" th:if="'管理员'==${session.user.role}">
             <a href="#" class="dropdown-toggle" data-toggle="dropdown">用户管理<span class="caret"></span></a>
             <ul class="dropdown-menu">
@@ -27,7 +39,10 @@
                 <li><a href="user_read">新闻审核员管理</a></li>
             </ul>
         </li>
-        <li role="presentation" class="dropdown">
+
+
+        <!--模块用户：管理员-->
+        <li role="presentation" class="dropdown" th:if="'管理员'==${session.user.role}">
             <a href="#" class="dropdown-toggle" data-toggle="dropdown">新闻管理<span class="caret"></span></a>
             <ul class="dropdown-menu">
                 <li><a href="new_add">发布新闻</a></li>
