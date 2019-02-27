@@ -14,6 +14,8 @@ public class User {
     private int id;
     private String name;
     private String password;
+    /*个人头像*/
+    private String portrait;
     private String realname;
     private String phone;
     private String role;
@@ -66,12 +68,21 @@ public class User {
         this.role = role;
     }
 
+    public String getPortrait() {
+        return portrait;
+    }
+
+    public void setPortrait(String portrait) {
+        this.portrait = portrait;
+    }
+
     @Override
     public String toString() {
         return "User{" +
                 "id=" + id +
                 ", name='" + name + '\'' +
                 ", password='" + password + '\'' +
+                ", portrait='" + portrait + '\'' +
                 ", realname='" + realname + '\'' +
                 ", phone='" + phone + '\'' +
                 ", role='" + role + '\'' +

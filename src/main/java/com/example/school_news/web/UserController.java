@@ -2,10 +2,13 @@ package com.example.school_news.web;
 
 import com.example.school_news.pojo.User;
 import com.example.school_news.service.UserService;
+import com.example.school_news.util.FileUtils;
 import com.example.school_news.util.Page4Navigator;
 import com.example.school_news.util.Result;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.util.ResourceUtils;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 import sun.net.httpserver.HttpsServerImpl;
 
 import javax.servlet.http.HttpSession;
@@ -73,8 +76,19 @@ public class UserController {
     }
 
     @PutMapping("user/{id}")
-    public void update(User bean) throws Exception {
+    public Object update(User bean, MultipartFile image) throws Exception {
+        String img_folder = "static/img/user";
+//                String img_path1 = request.getServletContext().getRealPath(img_folder);
+        String img_path = ResourceUtils.getURL("classpath:").getPath() + img_folder;
+//                String img_path =  request.getServletContext().getRealPath("") + img_folder;
+        String img_name = bean.getId() + ".jpg";
+        if (FileUtils.upload(image, img_path, img_name))
+            bean.setPortrait(img_name);
+        else
+            return Result.fail("上传失败");
+        System.out.println("图片上传成功");
         userService.update(bean);
+        return Result.success();
     }
 
     @PostMapping("admin_loginPage")

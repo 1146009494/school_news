@@ -200,7 +200,7 @@ public class NewController {
      * @throws Exception
      */
     @PutMapping("new/{id}")
-    public void update(New bean) throws Exception {
+    public void update(New bean ) throws Exception {
         newService.update(bean);
     }
 

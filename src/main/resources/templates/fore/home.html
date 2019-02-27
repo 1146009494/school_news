@@ -3,7 +3,7 @@
 <html lang="en" xmlns:th="http://www.thymeleaf.org">
 <head >
     <meta charset="UTF-8">
-    <title th:text="'前台首页'">首页</title>
+    <title th:text="'前台首页'">首页</title>a
     <link href="webjars/bootstrap/3.0.1/css/bootstrap.min.css" rel="stylesheet">
 </head>
 
@@ -122,7 +122,7 @@
                             <br>
                             <div class="row clearfix">
                                 <div class="col-md-12 column">
-                                    <a >{{bean.note_title}}</a>
+                                    <a :href="'fore_new_info?nid='+bean.id">{{bean.note_title}}</a>
                                 </div>
                             </div>
                             <div class="row clearfix">
@@ -134,7 +134,7 @@
                                 <div class="col-md-12 column">
                                     <div class="row clearfix">
                                         <div class="col-md-8 column">
-                                            <img height="25px" width="25px" alt="25x25"  :src="'img/news/'+(bean.image_url)" class="img-circle" />
+                                            <img height="25px" width="25px" alt="25x25"  :src="'img/user/'+(bean.user_write.portrait)" class="img-circle" />
                                             <span> |{{bean.user_write.name}}|{{bean.note_type.name}}|{{bean.refer_time|dateformat}}</span>
 
                                             <!--<p>新闻发布人头像以及昵称|发布时间</p>-->

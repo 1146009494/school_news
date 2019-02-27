@@ -15,6 +15,8 @@ public class MyWebMvc extends WebMvcConfigurerAdapter {
         registry.addViewController("/fore_home").setViewName("fore/home");
         registry.addViewController("/fore_login").setViewName("fore/login");
         registry.addViewController("/fore_register").setViewName("fore/register");
+        registry.addViewController("/fore_new_info").setViewName("fore/new_info");
+
 
         /*个人中心*/
 //        registry.addViewController("/personal_zone").setViewName("fore/personal_zone");
