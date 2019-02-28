@@ -1,19 +1,19 @@
 <div class="col-xs-3 " th:fragment="html" xmlns:th="http://www.w3.org/1999/xhtml">
     <!--左侧菜单栏开始-->
-    <ul class="nav nav-pills nav-stacked" style="width:100px">
-        <li role="presentation">
+    <ul class="nav nav-pills nav-stacked list-group" style="width:250px">
+        <li  class="list-group-item" role="presentation">
             <!--<span th:text="${null=session.user}?${session.user.name}:未登录"></span>-->
-            <span th:if="${null!=session.user}">你好，[[${session.user.name}]],<a href="fore_login">退出</a></span>
+            <p th:if="${null!=session.user}">欢迎回来，[[${session.user.name}]]<small>[[${session.user.role}]]</small></p>
 
 
         </li>
         <!--每一个用户都有的模块-->
-        <li role="presentation">
-            <a href="user_info">个人信息管理</a>
+        <li class="list-group-item" role="presentation" >
+            <a href="user_info" class="btn btn-primary">个人信息管理</a>
         </li>
 
         <!--用户级别：除了管理员都有-->
-        <li role="presentation" class="dropdown" th:if="'管理员'!=${session.user.role}">
+        <li class="dropdown list-group-item" role="presentation"  th:if="'管理员'!=${session.user.role}" >
             <a href="#" class="dropdown-toggle" data-toggle="dropdown">个人新闻管理<span class="caret"></span></a>
             <ul class="dropdown-menu">
                 <li><a href="new_add">发布新闻</a></li>
@@ -22,33 +22,33 @@
         </li>
 
         <!--模块用户：新闻审核员-->
-        <li role="presentation" class="dropdown"  th:if="${'新闻审核员'==session.user.role}">
+        <li role="presentation" class="dropdown list-group-item"  th:if="${'新闻审核员'==session.user.role}">
             <a href="#" class="dropdown-toggle" data-toggle="dropdown">新闻审核管理<span class="caret"></span></a>
-            <ul class="dropdown-menu">
-                <li><a href="new_NoConfirm">待审核新闻</a></li>
-                <li><a href="myconfirm">我的审核</a></li>
+            <ul class="dropdown-menu list-group">
+                <li class="list-group-item"><a href="new_NoConfirm">待审核新闻</a></li>
+                <li class="list-group-item"><a href="myconfirm">我的审核</a></li>
             </ul>
         </li>
 
         <!--模块用户：管理员-->
-        <li role="presentation" th:if="'管理员'==${session.user.role}">
+        <li class="list-group-item" role="presentation" th:if="'管理员'==${session.user.role}">
             <a href="#" class="dropdown-toggle" data-toggle="dropdown">用户管理<span class="caret"></span></a>
-            <ul class="dropdown-menu">
-                <li><a href="user_add">新增用户</a></li>
-                <li><a href="user_write">新闻投稿员管理</a></li>
-                <li><a href="user_read">新闻审核员管理</a></li>
+            <ul class="dropdown-menu list-group">
+                <li class="list-group-item"><a href="user_add">新增用户</a></li>
+                <li class="list-group-item"><a href="user_write">新闻投稿员管理</a></li>
+                <li class="list-group-item"><a href="user_read">新闻审核员管理</a></li>
             </ul>
         </li>
 
 
         <!--模块用户：管理员-->
-        <li role="presentation" class="dropdown" th:if="'管理员'==${session.user.role}">
+        <li role="presentation" class="dropdown list-group-item" th:if="'管理员'==${session.user.role}">
             <a href="#" class="dropdown-toggle" data-toggle="dropdown">新闻管理<span class="caret"></span></a>
-            <ul class="dropdown-menu">
-                <li><a href="new_add">发布新闻</a></li>
-                <li><a href="new_confirm">新闻信息管理</a></li>
-                <li><a href="new_NoConfirm">未审核新闻管理</a></li>
-                <li><a href="new_type">新闻类别管理</a></li>
+            <ul class="dropdown-menu list-group">
+                <li class="list-group-item"><a href="new_add">发布新闻</a></li>
+                <li class="list-group-item"><a href="new_confirm">新闻信息管理</a></li>
+                <li class="list-group-item"><a href="new_NoConfirm">未审核新闻管理</a></li>
+                <li class="list-group-item"><a href="new_type">新闻类别管理</a></li>
             </ul>
     </ul>
     <!--左侧菜单栏结束-->

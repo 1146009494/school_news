@@ -1,34 +1,50 @@
 <!DOCTYPE html>
 <html lang="en">
 <html lang="en" xmlns:th="http://www.thymeleaf.org">
-<head >
+<head>
     <meta charset="UTF-8">
-    <title th:text="'前台首页'">首页</title>a
+    <meta name="viewport" content="width=device-width,initial-scale=1">
+    <title th:text="'前台首页'">首页</title>
+    <script src="webjars/jquery/2.0.0/jquery.min.js"></script>
     <link href="webjars/bootstrap/3.0.1/css/bootstrap.min.css" rel="stylesheet">
 </head>
+<style>
+    .gray {
+        background-color: #777777;
+    }
 
+</style>
 <body>
+<script>
+    function change(ob) {
+        alert(1);
+        $(this).attr(ob).toggleClass("gray");
+    }
+</script>
 <div id="workingArea" class="container">
     <div class="row clearfix">
-        <div style="margin-top: 60px"></div>
         <!--导航栏-->
         <div class="col-md-12 column">
             <!--顶部导航栏-->
-            <nav class="navbar navbar-default navbar-inverse navbar-fixed-top" role="navigation">
+            <nav class="navbar navbar-inverse  " role="navigation">
                 <div class="navbar-header">
-                    <button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#bs-example-navbar-collapse-1"> <span class="sr-only">Toggle navigation</span><span class="icon-bar"></span><span class="icon-bar"></span><span class="icon-bar"></span></button> <a class="navbar-brand" href="fore_home" >小萝筐新闻网</a>
+                    <button type="button" class="navbar-toggle" data-toggle="collapse"
+                            data-target="#bs-example-navbar-collapse-1"><span
+                            class="sr-only">Toggle navigation</span><span class="icon-bar"></span><span
+                            class="icon-bar"></span><span class="icon-bar"></span></button>
+                    <a class="navbar-brand" href="fore_home">小萝筐新闻网</a>
                 </div>
 
                 <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
                     <ul class="nav navbar-nav">
-                        <li v-for="type in types" >
+                        <li v-for="type in types">
                             <a href="#" @click="search_type(type.name)">{{type.name}}</a>
                         </li>
 
                     </ul>
                     <form class="navbar-form navbar-left" role="search">
                         <div class="form-group">
-                            <input type="text" class="form-control" v-model="keyword" />
+                            <input type="text" class="form-control" v-model="keyword"/>
                         </div>
                         <button type="submit" class="btn btn-default" @click="search">搜索</button>
                     </form>
@@ -37,8 +53,11 @@
                         <li th:if="${null==session.user}">
                             <a href="fore_login">请登录</a>
                         </li>
-                        <li class="dropdown" th:if="${null!=session.user}" >
-                            <a  href="#" class="dropdown-toggle" data-toggle="dropdown" ><span th:text="${session.user.name}"></span><strong class="caret"></strong></a>
+                        <li class="dropdown" th:if="${null!=session.user}">
+                            <a href="#" class="dropdown-toggle" data-toggle="dropdown"><span><img height="25px"
+                                                                                                  width="25px"
+                                                                                                  th:src="'img/user/'+${session.user.portrait}"></span><strong
+                                    class="caret"></strong></a>
                             <ul class="dropdown-menu">
                                 <li>
                                     <a href="home" @click="">个人中心</a>
@@ -47,12 +66,12 @@
                                     <a href="#" @click="logout">退出</a>
                                 </li>
                                 <!--<li>-->
-                                    <!--<a href="#">Something else here</a>-->
+                                <!--<a href="#">Something else here</a>-->
                                 <!--</li>-->
                                 <!--<li class="divider">-->
                                 <!--</li>-->
                                 <!--<li>-->
-                                    <!--<a href="#">Separated link</a>-->
+                                <!--<a href="#">Separated link</a>-->
                                 <!--</li>-->
                             </ul>
                         </li>
@@ -73,69 +92,85 @@
                 </ol>
                 <div class="carousel-inner">
                     <div class="item active">
-                        <img alt="" src="http://ibootstrap-file.b0.upaiyun.com/lorempixel.com/1600/500/sports/1/default.jpg" />
+                        <img alt=""
+                             src="http://ibootstrap-file.b0.upaiyun.com/lorempixel.com/1600/500/sports/1/default.jpg"/>
                         <!--<img alt="" src="/img/news/4.jpg" />-->
                         <div class="carousel-caption">
                             <h4>
                                 First Thumbnail label
                             </h4>
                             <p>
-                                Cras justo odio, dapibus ac facilisis in, egestas eget quam. Donec id elit non mi porta gravida at eget metus. Nullam id dolor id nibh ultricies vehicula ut id elit.
+                                Cras justo odio, dapibus ac facilisis in, egestas eget quam. Donec id elit non mi porta
+                                gravida at eget metus. Nullam id dolor id nibh ultricies vehicula ut id elit.
                             </p>
                         </div>
                     </div>
                     <div class="item">
-                        <img alt="" src="http://ibootstrap-file.b0.upaiyun.com/lorempixel.com/1600/500/sports/2/default.jpg" />
+                        <img alt=""
+                             src="http://ibootstrap-file.b0.upaiyun.com/lorempixel.com/1600/500/sports/2/default.jpg"/>
                         <div class="carousel-caption">
                             <h4>
                                 Second Thumbnail label
                             </h4>
                             <p>
-                                Cras justo odio, dapibus ac facilisis in, egestas eget quam. Donec id elit non mi porta gravida at eget metus. Nullam id dolor id nibh ultricies vehicula ut id elit.
+                                Cras justo odio, dapibus ac facilisis in, egestas eget quam. Donec id elit non mi porta
+                                gravida at eget metus. Nullam id dolor id nibh ultricies vehicula ut id elit.
                             </p>
                         </div>
                     </div>
                     <div class="item">
-                        <img alt="" src="http://ibootstrap-file.b0.upaiyun.com/lorempixel.com/1600/500/sports/3/default.jpg" />
+                        <img alt=""
+                             src="http://ibootstrap-file.b0.upaiyun.com/lorempixel.com/1600/500/sports/3/default.jpg"/>
                         <div class="carousel-caption">
                             <h4>
                                 Third Thumbnail label
                             </h4>
                             <p>
-                                Cras justo odio, dapibus ac facilisis in, egestas eget quam. Donec id elit non mi porta gravida at eget metus. Nullam id dolor id nibh ultricies vehicula ut id elit.
+                                Cras justo odio, dapibus ac facilisis in, egestas eget quam. Donec id elit non mi porta
+                                gravida at eget metus. Nullam id dolor id nibh ultricies vehicula ut id elit.
                             </p>
                         </div>
                     </div>
-                </div> <a class="left carousel-control" href="#carousel-446425" data-slide="prev"><span class="glyphicon glyphicon-chevron-left"></span></a> <a class="right carousel-control" href="#carousel-446425" data-slide="next"><span class="glyphicon glyphicon-chevron-right"></span></a>
+                </div>
+                <a class="left carousel-control" href="#carousel-446425" data-slide="prev"><span
+                        class="glyphicon glyphicon-chevron-left"></span></a> <a class="right carousel-control"
+                                                                                href="#carousel-446425"
+                                                                                data-slide="next"><span
+                    class="glyphicon glyphicon-chevron-right"></span></a>
             </div>
         </div>
         <!--核心内容显示-->
-        <div class="col-md-12 column">
+        <div class="col-md-12 column ">
 
             <!--网页展示-->
-            <div  class="row clearfix">
+            <div class="row clearfix">
                 <!--网页新闻展示列表左侧占8个栅格-->
-                <div class="col-md-8 column">
-                    <div class="row clearfix">
-                        <!--新闻列表遍历div-->
-                        <div v-for="bean in beans" class="col-md-12 column">
-                            <br>
+                <div class="row clearfix">
+
+                </div>
+                <div class="col-md-8 column" style="margin-top: 20px">
+                    <!--新闻列表遍历div-->
+                    <ul class="list-group" v-for="bean in beans">
+                        <li class="list-group-item " style="background-color: #A4A4A4">
                             <div class="row clearfix">
                                 <div class="col-md-12 column">
-                                    <a :href="'fore_new_info?nid='+bean.id">{{bean.note_title}}</a>
+                                    <a :href="'fore_new_info?nid='+bean.id"><b>{{bean.note_title}}</b></a>
                                 </div>
+                                <br>
                             </div>
                             <div class="row clearfix">
                                 <div class="col-md-12 column">
-                                    <p>新闻副标题</p>
+                                    <p style="width: 700px;white-space: nowrap;text-overflow: ellipsis; overflow: hidden;">
+                                        {{bean.note}}</p>
                                 </div>
                             </div>
                             <div class="row clearfix">
                                 <div class="col-md-12 column">
                                     <div class="row clearfix">
                                         <div class="col-md-8 column">
-                                            <img height="25px" width="25px" alt="25x25"  :src="'img/user/'+(bean.user_write.portrait)" class="img-circle" />
-                                            <span> |{{bean.user_write.name}}|{{bean.note_type.name}}|{{bean.refer_time|dateformat}}</span>
+                                            <img height="25px" width="25px" alt="25x25"
+                                                 :src="'img/user/'+(bean.user_write.portrait)" class="img-circle"/>
+                                            <span> &nbsp;{{bean.user_write.name}} &nbsp;| &nbsp;{{bean.note_type.name}} &nbsp;| &nbsp;{{bean.refer_time|dateformat}}</span>
 
                                             <!--<p>新闻发布人头像以及昵称|发布时间</p>-->
                                         </div>
@@ -145,10 +180,15 @@
                                     </div>
                                 </div>
                             </div>
-                        </div>
+                        </li>
+                    </ul>
+
+                    <div class="row clearfix"></div>
+                    <!--分页显示,并居中-->
+                    <div align="center">
+                        <div th:replace="include/admin/adminPage::html"></div>
                     </div>
-                    <!--分页显示-->
-                    <div th:replace="include/admin/adminPage::html"></div>
+
                 </div>
                 <!--网页新闻展示列表右侧侧占4个栅格-->
                 <div class="col-md-4 column">
@@ -158,8 +198,8 @@
         </div>
     </div>
 </div>
-<script src="webjars/jquery/2.0.0/jquery.min.js"> </script>
-<script src="webjars/bootstrap/3.0.1/js/bootstrap.min.js"> </script>
+
+<script src="webjars/bootstrap/3.0.1/js/bootstrap.min.js"></script>
 <script src="js/vue/2.5.16/vue.min.js"></script>
 <script src="js/axios/0.17.1/axios.min.js"></script>
 <script src="js/moment/2.22.2/moment.js"></script> <!-- vue.js 格式化日期用的 -->
@@ -188,7 +228,7 @@
 </script>
 <script>
     /*时间格式化 全局过滤器*/
-    Vue.filter('dateformat', function(dataStr) {
+    Vue.filter('dateformat', function (dataStr) {
         return moment(dataStr).format('YYYY-MM-DD HH:mm:ss')
     })
     $(function () {
@@ -199,14 +239,14 @@
             pagination: {},
             beans: [],
             bean: {
-                id: 0, user_write: {realname:""}, refer_time: "", note_type: {id: 0}, note_title: "", note: ""
-                , image_url: "", video_url: "", user_auditor: {realname:""},auditor_time:"", state: "审核通过"
+                id: 0, user_write: {realname: ""}, refer_time: "", note_type: {id: 0}, note_title: "", note: ""
+                , image_url: "", video_url: "", user_auditor: {realname: ""}, auditor_time: "", state: "审核通过"
             },
-            state:"审核通过",
+            state: "审核通过",
             types: [],
-            is_search:"",
-            keyword:"",
-            size:"5",
+            is_search: "",
+            keyword: "",
+            size: "5",
         };
 
         //ViewModel
@@ -221,10 +261,10 @@
             },
             methods: {
                 list: function (start) {
-                    var url = this.uri+"bystate/"+this.state+"?start=" + start+"&size="+this.size;
+                    var url = this.uri + "bystate/" + this.state + "?start=" + start + "&size=" + this.size;
 //                    如果是条件查询就访问这个请求
                     if (this.is_search) {
-                        url = this.uri+"_search/"+this.bean.state+"?keyword=" + this.keyword + "&start=" + start;
+                        url = this.uri + "_search/" + this.bean.state + "?keyword=" + this.keyword + "&start=" + start;
                     }
                     axios.get(url).then(function (response) {
                         console.log(response.data);
@@ -240,8 +280,8 @@
                         console.log(vue.types);
                     })
                 },
-                logout:function () {
-                    var url="logout";
+                logout: function () {
+                    var url = "logout";
                     axios.post(url).then(function (response) {
                         console.log(response.data);
                         if (response.data.code == 0) location.href = "fore_login";
@@ -251,7 +291,7 @@
                 search: function () {
 //                    alert(this.keyword);
                     this.is_search = true;
-                    var url = this.uri + "_search/"+this.bean.state+"?keyword=" + this.keyword;
+                    var url = this.uri + "_search/" + this.bean.state + "?keyword=" + this.keyword;
                     axios.get(url).then(function (response) {
                         vue.pagination = response.data.data;
                         vue.beans = response.data.data.content;
@@ -259,7 +299,7 @@
                 },
                 /*导航栏查询*/
                 search_type: function (type_name) {
-                    this.keyword=type_name;
+                    this.keyword = type_name;
                     this.search();
                 },
                 jump: function (page) {

@@ -91,18 +91,24 @@
 <body>
 <div class="container" id="workingArea">
     <div class="row clearfix">
+        <!--导航栏-->
+        <div class="col-md-12 column">
+            <!--顶部导航栏-->
+            <nav class="navbar  navbar-inverse " role="navigation">
+                <div class="navbar-header">
+                    <button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#bs-example-navbar-collapse-1"> <span class="sr-only">Toggle navigation</span><span class="icon-bar"></span><span class="icon-bar"></span><span class="icon-bar"></span></button> <a class="navbar-brand" href="fore_home" >小萝筐新闻网</a>
+                </div>
+
+            </nav>
+        </div>
         <div class="col-md-12 column">
             <div class="row clearfix">
-                <div class="col-md-12 column">
-                    <h3 class="text-center text-info">
-                        注册页
-                    </h3>
-                </div>
-            </div>
-            <div class="row clearfix">
-                <div class="col-md-3 column">
-                </div>
+                <div class="col-md-3 column"></div>
+                <!--注册模块-->
                 <div class="col-md-6 column">
+                    <h3 class="text-center text-info">
+                        注册
+                    </h3>
                     <form class="form-horizontal" role="form">
                         <div class="form-group">
                             <label class="col-sm-2 control-label">用户名：</label>
@@ -134,14 +140,13 @@
                         <!--</div>-->
                         <div class="form-group">
                             <div class="col-sm-offset-2 col-sm-10">
-                                <a  class="btn btn-default"  @click="register">注册</a>
-                                <a  class="btn btn-default" href="fore_login">返回登陆</a>
+                                <a  class="btn btn-primary"  @click="register">注册</a>
+                                <a  class="btn btn-primary" href="fore_login">返回登陆</a>
                             </div>
                         </div>
                     </form>
                 </div>
-                <div class="col-md-3 column">
-                </div>
+                <div class="col-md-3 column"></div>
             </div>
         </div>
     </div>
