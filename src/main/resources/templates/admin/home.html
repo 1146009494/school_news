@@ -46,3 +46,18 @@
 </div>
 </body>
 </html>
+<script>
+    var vue=new Vue({
+        el:'#workingArea',
+        data:'',
+        methods:{
+            logout: function () {
+                var url = "logout";
+                axios.post(url).then(function (response) {
+                    console.log(response.data);
+                    if (response.data.code == 0) location.href = "fore_login";
+                });
+            }
+        }
+    })
+</script>
