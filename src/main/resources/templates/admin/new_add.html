@@ -1,7 +1,6 @@
 <!DOCTYPE html>
 <html lang="en" xmlns:th="http://www.thymeleaf.org" xmlns:v-bind="http://www.w3.org/1999/xhtml">
 <head th:include="include/admin/adminHeader::html('管理员')"></head>
-\
 
 <style>
     div.container div.row div {
@@ -10,8 +9,8 @@
     }
 
     div.container div.row div {
-        background-color: lightgray;
-        border: 1px solid gray;
+        /*background-color: lightgray;*/
+        /*border: 1px solid gray;*/
         text-align: center;
     }
 </style>
@@ -84,7 +83,14 @@
                 },
                 getVideo: function (event) {
                     this.video = event.target.files[0];
-                }
+                },
+                logout: function () {
+                    var url = "logout";
+                    axios.post(url).then(function (response) {
+                        console.log(response.data);
+                        if (response.data.code == 0) location.href = "fore_login";
+                    });
+                },
             }
         });
     });
@@ -96,62 +102,110 @@
         <div class="container">
             <div class="row">
                 <!--栅栏布局12列开始-->
-                <div class="col-xs-12"><p>欢迎进入校园管理系统后台</p></div>
+                <div class="col-md-12">
+                    <div th:replace="include/admin/adminNavigator::html"></div>
+                </div>
 
+                <!--面包屑导航-->
+                <div class="col-md-12" style="text-align: left">
+                    <ol class="breadcrumb">
+                        <li><a href="/home">个人中心</a></li>
+                        <li>新闻发布</li>
+                    </ol>
+                </div>
                 <!--栅栏布局3列-->
                 <div th:replace="include/admin/adminLeftMenu::html"></div>
 
                 <!--栅栏布局9列开始-->
-                <div class="col-xs-9 ">
+                <div class="col-md-9 ">
+                    <form class="form-horizontal" role="form">
+                        <div class="form-group">
+                            <label class="col-sm-4 control-label">文章标题：</label>
+                            <div class="col-sm-6">
+                                <input  class="form-control"  v-model="bean.note_title"/>
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label  class="col-sm-4 control-label">文章内容：</label>
+                            <div class="col-sm-6">
+                                <input  class="form-control"  v-model="bean.note" />
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label  class="col-sm-4 control-label">文章类型：</label>
+                            <div class="col-sm-6">
+                                <select class="form-control" v-model="bean.note_type">
+                                    <option v-for="type in types" v-bind:value="type">
+                                        {{type.name}}
+                                    </option>
+                                </select>
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label  class="col-sm-4 control-label">图片上传 ：</label>
+                            <div class="col-sm-6">
+                                <input id="image"   type="file" @change="getImage($event)">
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label  class="col-sm-4 control-label">视频上传 ：</label>
+                            <div class="col-sm-6">
+                                <input id="video" type="file"  @change="getVideo($event)">
+                            </div>
+                        </div>
+                        <div class="=form-group">
+                            <button class="btn btn-primary" type="button" @click="add">增加</button>
+                        </div>
+                    </form>
                     <div>
-                        <form style="width: 500px;margin: auto">
-                            <table>
-                                <tr>
-                                    <td>文章标题：</td>
-                                    <td><input v-model="bean.note_title"></td>
-                                </tr>
-                                <tr>
-                                    <td>文章内容：</td>
-                                    <td><input v-model="bean.note"></td>
-                                </tr>
-                                <tr>
-                                    <td>
-                                        文章类型：
-                                    </td>
-                                    <td>
-                                        <select v-model="bean.note_type">
-                                            <option v-for="type in types" v-bind:value="type">
-                                                {{type.name}}
-                                            </option>
-                                        </select>
-                                    </td>
-                                </tr>
-                                <tr>
-                                    <td>图片上传 ：</td>
-                                    <td><input id="image" type="file" @change="getImage($event)"></td>
-                                </tr>
-                                <tr>
-                                    <td>视频上传 ：</td>
-                                    <td><input id="video" type="file" @change="getVideo($event)"></td>
-                                </tr>
-
-
+                        <!--<form style="width: 500px;margin: auto">-->
+                            <!--<table>-->
                                 <!--<tr>-->
-                                <!--<td>文章类型：</td>-->
-                                <!--<td><select v-model="bean.role">-->
-                                <!--<option>管理员</option>-->
-                                <!--<option>新闻投稿员</option>-->
-                                <!--<option>新闻审核员</option>-->
-                                <!--</select>-->
-                                <!--</td>-->
+                                    <!--<td>文章标题：</td>-->
+                                    <!--<td><input v-model="bean.note_title"></td>-->
                                 <!--</tr>-->
-                                <tr>
-                                    <td colspan="2" align="center">
-                                        <button class="btn btn-primary" type="button" @click="add">增加</button>
-                                    </td>
-                                </tr>
-                            </table>
-                        </form>
+                                <!--<tr>-->
+                                    <!--<td>文章内容：</td>-->
+                                    <!--<td><input v-model="bean.note"></td>-->
+                                <!--</tr>-->
+                                <!--<tr>-->
+                                    <!--<td>-->
+                                        <!--文章类型：-->
+                                    <!--</td>-->
+                                    <!--<td>-->
+                                        <!--<select v-model="bean.note_type">-->
+                                            <!--<option v-for="type in types" v-bind:value="type">-->
+                                                <!--{{type.name}}-->
+                                            <!--</option>-->
+                                        <!--</select>-->
+                                    <!--</td>-->
+                                <!--</tr>-->
+                                <!--<tr>-->
+                                    <!--<td>图片上传 ：</td>-->
+                                    <!--<td><input id="image" type="file" @change="getImage($event)"></td>-->
+                                <!--</tr>-->
+                                <!--<tr>-->
+                                    <!--<td>视频上传 ：</td>-->
+                                    <!--<td><input id="video" type="file" @change="getVideo($event)"></td>-->
+                                <!--</tr>-->
+
+
+                                <!--&lt;!&ndash;<tr>&ndash;&gt;-->
+                                <!--&lt;!&ndash;<td>文章类型：</td>&ndash;&gt;-->
+                                <!--&lt;!&ndash;<td><select v-model="bean.role">&ndash;&gt;-->
+                                <!--&lt;!&ndash;<option>管理员</option>&ndash;&gt;-->
+                                <!--&lt;!&ndash;<option>新闻投稿员</option>&ndash;&gt;-->
+                                <!--&lt;!&ndash;<option>新闻审核员</option>&ndash;&gt;-->
+                                <!--&lt;!&ndash;</select>&ndash;&gt;-->
+                                <!--&lt;!&ndash;</td>&ndash;&gt;-->
+                                <!--&lt;!&ndash;</tr>&ndash;&gt;-->
+                                <!--<tr>-->
+                                    <!--<td colspan="2" align="center">-->
+                                        <!--<button class="btn btn-primary" type="button" @click="add">增加</button>-->
+                                    <!--</td>-->
+                                <!--</tr>-->
+                            <!--</table>-->
+                        <!--</form>-->
                     </div>
                 </div>
                 <!--栅栏布局9列结束-->

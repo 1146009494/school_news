@@ -7,6 +7,7 @@
     <title th:text="'前台首页'">首页</title>
     <script src="webjars/jquery/2.0.0/jquery.min.js"></script>
     <link href="webjars/bootstrap/3.0.1/css/bootstrap.min.css" rel="stylesheet">
+    <script src="webjars/bootstrap/3.0.1/js/bootstrap.min.js"></script>
 </head>
 <style>
     .gray {
@@ -24,7 +25,7 @@
 <div id="workingArea" class="container">
     <div class="row clearfix">
         <!--导航栏-->
-        <div class="col-md-12 column">
+        <div class="col-md-12 ">
             <!--顶部导航栏-->
             <nav class="navbar navbar-inverse  " role="navigation">
                 <div class="navbar-header">
@@ -54,10 +55,17 @@
                             <a href="fore_login">请登录</a>
                         </li>
                         <li class="dropdown" th:if="${null!=session.user}">
-                            <a href="#" class="dropdown-toggle" data-toggle="dropdown"><span><img height="25px"
-                                                                                                  width="25px"
-                                                                                                  th:src="'img/user/'+${session.user.portrait}"></span><strong
-                                    class="caret"></strong></a>
+                            <a href="#" class="dropdown-toggle" data-toggle="dropdown">
+                                <!--用户自己上传的头像-->
+                                <span th:if="null!=${session.user.portrait}"><img height="25px"
+                                                                                  width="25px"
+                                                                                  th:src="'img/user/'+${session.user.portrait}" class="img-circle"></span>
+                                <!--当用户没有自己设置头像时使用默认-->
+                                <span th:unless="null!=${session.user.portrait}"><img height="25px"
+                                                                                      width="25px"
+                                                                                      th:src="'img/user/default.jpg'" class="img-circle"></span>
+                                <strong
+                                        class="caret"></strong></a>
                             <ul class="dropdown-menu">
                                 <li>
                                     <a href="home" @click="">个人中心</a>
@@ -158,9 +166,10 @@
                                 </div>
                                 <br>
                             </div>
-                            <div class="row clearfix">
-                                <div class="col-md-12 column">
-                                    <p style="width: 700px;white-space: nowrap;text-overflow: ellipsis; overflow: hidden;">
+                            <div class="row  clearfix">
+                                <div class="col-md-12  column">
+                                    <p style="width: 700px;white-space: nowrap;text-overflow: ellipsis; overflow: hidden;"
+                                       :title="bean.note">
                                         {{bean.note}}</p>
                                 </div>
                             </div>
@@ -199,7 +208,7 @@
     </div>
 </div>
 
-<script src="webjars/bootstrap/3.0.1/js/bootstrap.min.js"></script>
+
 <script src="js/vue/2.5.16/vue.min.js"></script>
 <script src="js/axios/0.17.1/axios.min.js"></script>
 <script src="js/moment/2.22.2/moment.js"></script> <!-- vue.js 格式化日期用的 -->
@@ -226,6 +235,7 @@
             vue.list(start);
     }
 </script>
+
 <script>
     /*时间格式化 全局过滤器*/
     Vue.filter('dateformat', function (dataStr) {

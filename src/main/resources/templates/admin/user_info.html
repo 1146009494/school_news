@@ -55,16 +55,16 @@
                     /*头像*/
                     formData.append("image", this.img_portrait);
                     axios.put(url, formData).then(function (response) {
-                        if(response.data.code){
+                        if (response.data.code) {
                             alert("修改失败");
-                        }else
+                        } else
                             alert("修改成功");
                         localtion.reload();
                     });
                 },
                 /*退出当前用户*/
-                logout:function () {
-                    var url="logout";
+                logout: function () {
+                    var url = "logout";
                     axios.post(url).then(function (response) {
                         console.log(response.data);
                         if (response.data.code == 0) location.href = "fore_login";
@@ -72,6 +72,13 @@
                 },
                 getImage: function (event) {
                     this.img_portrait = event.target.files[0];
+                },
+                logout: function () {
+                    var url = "logout";
+                    axios.post(url).then(function (response) {
+                        console.log(response.data);
+                        if (response.data.code == 0) location.href = "fore_login";
+                    });
                 },
             }
         });
@@ -86,81 +93,80 @@
         <!--<div th:replace="include/admin/adminNavigator::html"></div>-->
         <div class="row">
             <!--导航栏-->
-            <div class="col-md-12 column">
+            <div class="col-md-12  column">
                 <!--顶部导航栏-->
-                <nav class="navbar navbar-default navbar-inverse navbar-stastic-top" role="navigation">
-                    <div class="navbar-header">
-                        <button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#bs-example-navbar-collapse-1"> <span class="sr-only">Toggle navigation</span><span class="icon-bar"></span><span class="icon-bar"></span><span class="icon-bar"></span></button> <a class="navbar-brand" href="fore_home" >小萝筐新闻网</a>
-                    </div>
-
-                    <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
-                        <!--右上角登陆模块-->
-                        <ul class="nav navbar-nav navbar-right">
-                            <li th:if="${null==session.user}">
-                                <a href="fore_login">请登录</a>
-                            </li>
-                            <li class="dropdown" th:if="${null!=session.user}" >
-
-                                <a  href="#" class="dropdown-toggle" data-toggle="dropdown" ><span ><img height="25px" width="25px" th:src="'img/user/'+${session.user.portrait}"></span><strong class="caret"></strong></a>
-                                <ul class="dropdown-menu">
-                                    <li>
-                                        <a href="home" @click="">个人中心</a>
-                                    </li>
-                                    <li>
-                                        <a href="#" @click="logout">退出</a>
-                                    </li>
-                                    <!--<li>-->
-                                    <!--<a href="#">Something else here</a>-->
-                                    <!--</li>-->
-                                    <!--<li class="divider">-->
-                                    <!--</li>-->
-                                    <!--<li>-->
-                                    <!--<a href="#">Separated link</a>-->
-                                    <!--</li>-->
-                                </ul>
-                            </li>
-                        </ul>
-                    </div>
-                </nav>
+                <div th:replace="include/admin/adminNavigator::html"></div>
             </div>
-            <!--栅栏布局12列开始-->
-            <div class="col-xs-12"><p>欢迎进入校园管理系统后台</p></div>
+
+            <!--面包屑导航-->
+            <div class="col-md-12 " style="text-align: left">
+                <ol class="breadcrumb">
+                    <li><a href="/home">个人中心</a></li>
+                    <li>个人信息管理</li>
+                </ol>
+            </div>
+
 
             <!--栅栏布局3列-->
-            <div th:replace="include/admin/adminLeftMenu::html"></div>
+            <div class="col-md-3 ">
+            <div th:replace="include/admin/adminLeftMenu::html"></div></div>
 
             <!--栅栏布局9列开始-->
-            <div class="col-xs-9 ">
-                <div class="row clearfix">
-                    <div class="col-md-4 column">
-                        <img alt="140x140" height="140px" width="140px"
-                             th:src="'img/user/'+${session.user.portrait}"
-                             class="img-circle"/>
-                        <br>
-                        <!--<a href="#" class="btn btn-primary">修改头像</a>-->
-                        <input id="image" type="file" @change="getImage($event)">
-                    </div>
-                    <div class="col-md-8 column">
-                        <div class="row clearfix">
-                            <div class="col-md-6 column">
-                                <label class="text-muted">用户名：</label>
-                                <input disabled="disabled" v-model="bean.name">
-                                <br>
-                                <label class="text-muted">姓名：</label>
-                                <input v-model="bean.realname" >
-                                <label class="text-muted">角色：</label>
-                                <input disabled="disabled" v-model="bean.role">
+            <div class="col-md-9 ">
+                <div class="col-md-12 column">
+                    <div class="row clearfix">
+                        <form class="form-horizontal" role="form">
+                            <div class="col-md-4">
+                                <!--用户自己上传的头像-->
+                                <span th:if="null!=${session.user.portrait}"><img height="140px"
+                                                                                  width="140px"
+                                                                                  th:src="'img/user/'+${session.user.portrait}" class="img-circle"></span>
+                                <!--当用户没有自己设置头像时使用默认-->
+                                <span th:unless="null!=${session.user.portrait}"><img height="140px"
+                                                                                      width="140px"
+                                                                                      th:src="'img/user/default.jpg'" class="img-circle"></span>
+                                <div class="form-group">
+                                    <label class="col-sm-6 control-label">上传头像：</label>
+                                    <div class="col-sm-6">
+                                        <input id="image" type="file" @change="getImage($event)">
+                                    </div>
+                                </div>
                             </div>
-                            <div class="col-md-6 column">
-                                <label class="text-muted">密码：</label>
-                                <input v-model="bean.password" >
-                                <br>
-                                <label class="text-muted">手机号：</label>
-                                <input v-model="bean.phone" >
+                            <!--右侧表单元素占八格-->
+                            <div class="col-md-8">
+                                <div class="form-group">
+                                    <label class="col-sm-4 control-label">用户名：</label>
+                                    <div class="col-sm-6">
+                                        <input class="form-control" v-model="bean.name"/>
+                                    </div>
+                                </div>
+                                <div class="form-group">
+                                    <label class="col-sm-4 control-label">密码：</label>
+                                    <div class="col-sm-6">
+                                        <input class="form-control" v-model="bean.password"/>
+                                    </div>
+                                </div>
+                                <div class="form-group">
+                                    <label class="col-sm-4 control-label">手机号：</label>
+                                    <div class="col-sm-6">
+                                        <input class="form-control" v-model="bean.phone"/>
+                                    </div>
+                                </div>
+                                <div class="form-group">
+                                    <label class="col-sm-4 control-label">姓名：</label>
+                                    <div class="col-sm-6">
+                                        <input class="form-control" v-model="bean.realname"/>
+                                    </div>
+                                </div>
+                                <div class="form-group">
+                                    <label class="col-sm-4 control-label">角色：</label>
+                                    <div class="col-sm-6">
+                                        <input class="form-control" disabled="disabled" v-model="bean.role"/>
+                                    </div>
+                                </div>
                             </div>
-                        </div>
+                        </form>
                     </div>
-
                 </div>
                 <button class="btn btn-primary" @click="update">提交修改</button>
             </div>

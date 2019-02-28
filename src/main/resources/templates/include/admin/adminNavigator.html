@@ -1,27 +1,47 @@
+
 <div class="navitagorDiv" th:fragment="html" xmlns:th="http://www.w3.org/1999/xhtml">
-
-    <nav class="navbar navbar-default navbar-static-top ">
-        <!--<img style="margin-left:10px;margin-right:0px" class="pull-left" src="img/site/tmallbuy.png" height="45px">-->
-        <a class="navbar-brand" href="#nowhere">托管后台</a>
-
-        <span th:if="${session.role}">
-            <a class="navbar-brand" href="admin_home">管理员管理</a>
-            </span>
-        <a class="navbar-brand" href="admin_teacher_list">老师管理</a>
-        <a class="navbar-brand" href="admin_parent_list">家长管理</a>
-        <a class="navbar-brand" href="admin_kid_list">孩子管理</a>
-        <a class="navbar-brand" href="admin_class_list">教室管理</a>
-        <a class="navbar-brand" href="">网站维护</a>
-        <div style="float:right;">
-            <span th:if="${null!=session.user}">
-                <a class="navbar-brand" th:href="'admin_edit?id='+${session.user.id}"
-                   th:text="${session.user.name}"></a>
-                <p class="navbar-brand" style="float: right" th:text="${session.role}"></p>
-                <a style="float: right" class="navbar-brand" href="admin_logout">
-                    <span class="glyphicon glyphicon-log-in"></span></a>
-             </span>
+    <nav class="navbar navbar-default navbar-inverse navbar-stastic-top" role="navigation">
+        <div class="navbar-header">
+            <button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#bs-example-navbar-collapse-1"> <span class="sr-only">Toggle navigation</span><span class="icon-bar"></span><span class="icon-bar"></span><span class="icon-bar"></span></button>
+            <a class="navbar-brand" href="fore_home" >小萝筐新闻网</a>
         </div>
 
+        <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
+            <!--右上角登陆模块-->
+            <ul class="nav navbar-nav navbar-right">
+                <li th:if="${null==session.user}">
+                    <a href="fore_login">请登录</a>
+                </li>
+                <li class="dropdown" th:if="${null!=session.user}" >
+
+                    <a  href="#" class="dropdown-toggle" data-toggle="dropdown" >
+                        <!--用户自己上传的头像-->
+                        <span th:if="null!=${session.user.portrait}"><img height="25px"
+                                                                          width="25px"
+                                                                          th:src="'img/user/'+${session.user.portrait}" class="img-circle"></span>
+                        <!--当用户没有自己设置头像时使用默认-->
+                        <span th:unless="null!=${session.user.portrait}"><img height="25px"
+                                                                              width="25px"
+                                                                              th:src="'img/user/default.jpg'" class="img-circle"></span>
+                        <strong class="caret"></strong></a>
+                    <ul class="dropdown-menu">
+                        <li>
+                            <a href="home" @click="">个人中心</a>
+                        </li>
+                        <li>
+                            <a href="#" @click="logout">退出</a>
+                        </li>
+                        <!--<li>-->
+                        <!--<a href="#">Something else here</a>-->
+                        <!--</li>-->
+                        <!--<li class="divider">-->
+                        <!--</li>-->
+                        <!--<li>-->
+                        <!--<a href="#">Separated link</a>-->
+                        <!--</li>-->
+                    </ul>
+                </li>
+            </ul>
+        </div>
     </nav>
 </div>
-

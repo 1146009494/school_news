@@ -8,8 +8,8 @@
     }
 
     div.container div.row div {
-        background-color: lightgray;
-        border: 1px solid gray;
+        /*background-color: lightgray;*/
+        /*border: 1px solid gray;*/
         text-align: center;
     }
 </style>
@@ -96,7 +96,14 @@
                 },
                 jumpByNumber: function (start) {
                     jumpByNumber(start, vue);
-                }
+                },
+                logout: function () {
+                    var url = "logout";
+                    axios.post(url).then(function (response) {
+                        console.log(response.data);
+                        if (response.data.code == 0) location.href = "fore_login";
+                    });
+                },
 
             }
         });
@@ -113,13 +120,22 @@
         <div class="container">
             <div class="row">
                 <!--栅栏布局12列开始-->
-                <div class="col-xs-12"><p>欢迎进入校园管理系统后台</p></div>
+                <div class="col-md-12">
+                    <div th:replace="include/admin/adminNavigator::html"></div>
+                </div>
 
+                <!--面包屑导航-->
+                <div class="col-md-12" style="text-align: left">
+                    <ol class="breadcrumb">
+                        <li><a href="/home">个人中心</a></li>
+                        <li>未审核新闻管理</li>
+                    </ol>
+                </div>
                 <!--栅栏布局3列-->
                 <div th:replace="include/admin/adminLeftMenu::html"></div>
 
                 <!--栅栏布局9列开始-->
-                <div class="col-xs-9 ">
+                <div class="col-md-9 ">
                     <!--搜索框开始-->
                     <!--<div class="container">-->
                     <div class="input-group">
@@ -153,10 +169,12 @@
                                 <td>{{bean.id}}</td>
                                 <td>{{bean.user_write.realname}}</td>
                                 <td>{{bean.refer_time|dateformat}}</td>
-                                <td>{{bean.note_title}}</td>
-                                <td>{{bean.note}}</td>
+                                <td><p style="width: 100px;white-space: nowrap;text-overflow: ellipsis; overflow: hidden;" :title="bean.note_title">
+                                    {{bean.note_title}}</p></td>
+                                <td> <p style="width: 100px;white-space: nowrap;text-overflow: ellipsis; overflow: hidden;" :title="bean.note">
+                                    {{bean.note}}</p></td>
                                 <td>{{bean.note_type.name}}</td>
-                                <td v-if="null!=bean.image_url"><img height="50px" :src="'img/news/'+bean.image_url"></td>
+                                <td v-if="null!=bean.image_url"><img height="30px" :src="'img/news/'+bean.image_url"></td>
                                 <td v-else>无</td>
                                 <td v-if="null!=bean.video_url">
                                     <a href="#nowhere" @click="getVideoUrl(bean.video_url)" data-toggle="modal" data-target="#myModal">
