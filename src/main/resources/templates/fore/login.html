@@ -6,6 +6,9 @@
     <script src="webjars/jquery/2.0.0/jquery.min.js"> </script>
     <link href="webjars/bootstrap/3.0.1/css/bootstrap.min.css" rel="stylesheet">
     <script src="webjars/bootstrap/3.0.1/js/bootstrap.min.js"> </script>
+
+    <script src="js/bootstrap/bootstrapValidator.js"></script>
+    <link href="css/bootstrap/bootstrapValidator.css" rel="stylesheet">
     <script src="js/vue/2.5.16/vue.min.js"></script>
     <script src="js/axios/0.17.1/axios.min.js"></script>
     <script src="js/moment/2.22.2/moment.js"></script> <!-- vue.js 格式化日期用的 -->
@@ -49,6 +52,39 @@
 
             }
         });
+        <!--bootstrapValidator表单验证-->
+        $('form').bootstrapValidator({
+            message: 'This value is not valid',
+            feedbackIcons: {
+                valid: 'glyphicon glyphicon-ok',
+                invalid: 'glyphicon glyphicon-remove',
+                validating: 'glyphicon glyphicon-refresh'
+            },
+            fields: {
+                username: {
+                    message: '用户名验证失败',
+                    validators: {
+                        notEmpty: {
+                            message: '用户名不能为空'
+                        }
+                    }
+                },
+                password: {
+                    validators: {
+                        notEmpty: {
+                            message: '密码不能为空'
+                        }
+                    }
+                }
+            }
+        });
+    });
+</script>
+
+<!--bootstrapValidator表单验证-->
+<script>
+    $(function () {
+
     });
 </script>
 <body>
@@ -79,15 +115,15 @@
                 <div class="col-md-6 column">
                     <form class="form-horizontal" role="form">
                         <div class="form-group">
-                                <label for="inputEmail3" class="col-sm-2 control-label">用户名：</label>
+                                <label  class="col-sm-2 control-label">用户名：</label>
                             <div class="col-sm-10">
-                                <input type="email" class="form-control" id="inputEmail3" v-model="bean.name"/>
+                                <input type="email" class="form-control" name="username" v-model="bean.name"/>
                             </div>
                         </div>
                         <div class="form-group">
-                            <label for="inputPassword3" class="col-sm-2 control-label">密码：</label>
+                            <label  class="col-sm-2 control-label">密码：</label>
                             <div class="col-sm-10">
-                                <input type="password" class="form-control" id="inputPassword3" v-model="bean.password" />
+                                <input type="password" class="form-control" name="password" v-model="bean.password" />
                             </div>
                         </div>
                         <!--<div class="form-group">-->
@@ -100,7 +136,7 @@
                         <!--</div>-->
                         <div class="form-group">
                             <div class="col-sm-offset-2 col-sm-10">
-                                <button  class="btn btn-primary" @click="login">登陆</button>
+                                <button name="submit" class="btn btn-primary" @click="login">登陆</button>
                                 <a  class="btn btn-primary"  @click="register">注册</a>
                             </div>
                         </div>

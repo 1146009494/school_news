@@ -1,6 +1,30 @@
 <!DOCTYPE html>
 <html lang="en" xmlns:th="http://www.thymeleaf.org" xmlns:v-bind="http://www.w3.org/1999/xhtml">
-<head th:include="include/admin/adminHeader::html('管理员')"></head>
+<head >
+    <script src="webjars/jquery/2.0.0/jquery.min.js"></script>
+    <link href="webjars/bootstrap/3.0.1/css/bootstrap.min.css" rel="stylesheet">
+    <script src="webjars/bootstrap/3.0.1/js/bootstrap.min.js"></script>
+    <script src="js/vue/2.5.16/vue.min.js"></script>
+    <script src="js/axios/0.17.1/axios.min.js"></script>
+    <script src="js/moment/2.22.2/moment.js"></script> <!-- vue.js 格式化日期用的 -->
+
+
+    <link href="http://twitter.github.com/bootstrap/assets/js/google-code-prettify/prettify.css" rel="stylesheet">
+    <link href="http://netdna.bootstrapcdn.com/twitter-bootstrap/2.3.1/css/bootstrap-combined.no-icons.min.css" rel="stylesheet">
+    <link href="http://netdna.bootstrapcdn.com/twitter-bootstrap/2.3.1/css/bootstrap-responsive.min.css" rel="stylesheet">
+    <link href="http://netdna.bootstrapcdn.com/font-awesome/3.0.2/css/font-awesome.css" rel="stylesheet">
+
+    <!--个人样式-->
+    <link href="css/index.css" rel="stylesheet">
+
+    <!--<script src="http://cdn.bootcss.com/jquery/1.9.1/jquery.min.js"></script>-->
+    <!--<script src="webjars/jquery/2.0.0/jquery.min.js"></script>-->
+    <!--键盘事件-->
+    <script src="js/jquery.hotkeys.js"></script>
+    <!--<script src="http://cdn.bootcss.com/twitter-bootstrap/2.3.1/js/bootstrap.min.js"></script>-->
+    <!--<script src="webjars/bootstrap/3.0.1/js/bootstrap.min.js"></script>-->
+    <script src="js/bootstrap-wysiwyg.js"></script>
+</head>
 
 <style>
     div.container div.row div {
@@ -21,8 +45,8 @@
         var data4Vue = {
             uri: "new",
             bean: {
-                id: 0, user_write: {id:0}, refer_time: "", note_type: {id: 0}, note_title: "", note: ""
-                ,image_url: "", video_url: "", user_auditor: "",auditor_time:"", state: "未审核"
+                id: 0, user_write: {id: 0}, refer_time: "", note_type: {id: 0}, note_title: "", note: ""
+                , image_url: "", video_url: "", user_auditor: "", auditor_time: "", state: "未审核"
             },
             types: [],
             image: "",
@@ -38,18 +62,18 @@
                 this.getUser();
             },
             methods: {
-                getUser:function () {
+                getUser: function () {
 //                    vue.bean.user_write=[[${session.user}]];
-                    this.bean.user_write.id=parseInt([[${session.user.id}]]);
+                    this.bean.user_write.id = parseInt([[${session.user.id}]]);
 //                    alert(this.bean.user_write.id);
                 },
-                    getNewType: function () {
-                        var url = "type";
-                        axios.get(url).then(function (response) {
-                            vue.types = response.data.data.content;
-    //                        console.log(vue.types);
-                        })
-                    },
+                getNewType: function () {
+                    var url = "type";
+                    axios.get(url).then(function (response) {
+                        vue.types = response.data.data.content;
+                        //                        console.log(vue.types);
+                    })
+                },
                 add: function () {
                     console.log(this.bean);
                     var url = this.uri;
@@ -70,13 +94,13 @@
                     console.log(formData);
                     axios.post(url, formData, {headers: {'Content-Type': 'multipart/form-data'}})
                         .then(function (response) {
-                        if (response.data.code != 0) {
-                            alert("增加失败");
-                        } else {
-                            alert("增加成功");
-                            this.bean = {id: "", name: "", password: "", realname: "", phone: "", role: ""};
-                        }
-                    });
+                            if (response.data.code != 0) {
+                                alert("增加失败");
+                            } else {
+                                alert("增加成功");
+                                this.bean = {id: "", name: "", password: "", realname: "", phone: "", role: ""};
+                            }
+                        });
                 },
                 getImage: function (event) {
                     this.image = event.target.files[0];
@@ -95,10 +119,52 @@
         });
     });
 </script>
+<!--富文本编辑器-->
+<script>
+    $(function(){
+        function initToolbarBootstrapBindings() {
+            var fonts = ['Serif', 'Sans', 'Arial', 'Arial Black', 'Courier',
+                    'Courier New', 'Comic Sans MS', 'Helvetica', 'Impact', 'Lucida Grande', 'Lucida Sans', 'Tahoma', 'Times',
+                    'Times New Roman', 'Verdana'],
+                fontTarget = $('[title=Font]').siblings('.dropdown-menu');
+            $.each(fonts, function (idx, fontName) {
+                fontTarget.append($('<li><a data-edit="fontName ' + fontName +'" style="font-family:\''+ fontName +'\'">'+fontName + '</a></li>'));
+            });
+            $('a[title]').tooltip({container:'body'});
+            $('.dropdown-menu input').click(function() {return false;})
+                .change(function () {$(this).parent('.dropdown-menu').siblings('.dropdown-toggle').dropdown('toggle');})
+                .keydown('esc', function () {this.value='';$(this).change();});
 
+            $('[data-role=magic-overlay]').each(function () {
+                var overlay = $(this), target = $(overlay.data('target'));
+                overlay.css('opacity', 0).css('position', 'absolute').offset(target.offset()).width(target.outerWidth()).height(target.outerHeight());
+            });
+            $('#voiceBtn').hide();
+            if ("onwebkitspeechchange"  in document.createElement("input")) {
+                var editorOffset = $('#editor').offset();
+                $('#voiceBtn').css('position','absolute').offset({top: editorOffset.top, left: editorOffset.left+$('#editor').innerWidth()-35});
+            } else {
+                $('#voiceBtn').hide();
+            }
+        };
+        function showErrorAlert (reason, detail) {
+            var msg='';
+            if (reason==='unsupported-file-type') {
+                msg = "Unsupported format " +detail;
+            } else {
+                console.log("error uploading file", reason, detail);
+            }
+            $('<div class="alert"> <button type="button" class="close" data-dismiss="alert">×</button>'+
+                '<strong>File upload error</strong> '+msg+' </div>').prependTo('#alerts');
+        };
+        initToolbarBootstrapBindings();
+        $('#editor').wysiwyg({ fileUploadError: showErrorAlert});
+    });
+</script>
 <body>
 <div>
     <div id="workingArea">
+
         <div class="container">
             <div class="row">
                 <!--栅栏布局12列开始-->
@@ -113,26 +179,90 @@
                         <li>新闻发布</li>
                     </ol>
                 </div>
-                <!--栅栏布局3列-->
-                <div th:replace="include/admin/adminLeftMenu::html"></div>
 
+
+                <!--栅栏布局3列-->
+                <div class="col-md-3">
+                    <div th:replace="include/admin/adminLeftMenu::html"></div>
+                </div>
                 <!--栅栏布局9列开始-->
                 <div class="col-md-9 ">
                     <form class="form-horizontal" role="form">
                         <div class="form-group">
                             <label class="col-sm-4 control-label">文章标题：</label>
                             <div class="col-sm-6">
-                                <input  class="form-control"  v-model="bean.note_title"/>
+                                <input class="form-control" v-model="bean.note_title"/>
                             </div>
                         </div>
                         <div class="form-group">
-                            <label  class="col-sm-4 control-label">文章内容：</label>
+
+                            <div class="col-md-12">
+                            <!--<div  style="height: 50px;"></div>-->
+                            <!--这里加上是为了让提示信息显示 不然会被遮挡-->
+                            <div class="btn-toolbar" data-role="editor-toolbar" data-target="#editor">
+                                <div class="btn-group">
+                                    <a class="btn dropdown-toggle" data-toggle="dropdown" title="Font"><i class="icon-font"></i><b class="caret"></b></a>
+                                    <ul class="dropdown-menu"> </ul>
+                                </div>
+                                <div class="btn-group">
+                                    <a class="btn dropdown-toggle" data-toggle="dropdown" title="Font Size"><i class="icon-text-height"></i> <b class="caret"></b></a>
+                                    <ul class="dropdown-menu">
+                                        <li><a data-edit="fontSize 5"><font size="5">Huge</font></a></li>
+                                        <li><a data-edit="fontSize 3"><font size="3">Normal</font></a></li>
+                                        <li><a data-edit="fontSize 1"><font size="1">Small</font></a></li>
+                                    </ul>
+                                </div>
+                                <div class="btn-group">
+                                    <a class="btn" data-edit="bold" title="Bold (Ctrl/Cmd+B)"><i class="icon-bold"></i></a> <!--加粗-->
+                                    <a class="btn" data-edit="italic" title="Italic (Ctrl/Cmd+I)"><i class="icon-italic"></i></a><!-- 斜体-->
+                                    <a class="btn" data-edit="strikethrough" title="Strikethrough"><i class="icon-strikethrough"></i></a><!-- 删除线-->
+                                    <a class="btn" data-edit="underline" title="Underline (Ctrl/Cmd+U)"><i class="icon-underline"></i></a><!-- 下划线-->
+                                </div>
+                                <div class="btn-group">
+                                    <a class="btn" data-edit="insertunorderedlist" title="Bullet list"><i class="icon-list-ul"></i></a><!-- 加点-->
+                                    <a class="btn" data-edit="insertorderedlist" title="Number list"><i class="icon-list-ol"></i></a><!-- 数字排序-->
+                                    <a class="btn" data-edit="outdent" title="Reduce indent (Shift+Tab)"><i class="icon-indent-left"></i></a><!-- 减少缩进-->
+                                    <a class="btn" data-edit="indent" title="Indent (Tab)"><i class="icon-indent-right"></i></a><!--增加缩进-->
+                                </div>
+                                <div class="btn-group">
+                                    <a class="btn" data-edit="justifyleft" title="Align Left (Ctrl/Cmd+L)"><i class="icon-align-left"></i></a><!--左对齐-->
+                                    <a class="btn" data-edit="justifycenter" title="Center (Ctrl/Cmd+E)"><i class="icon-align-center"></i></a><!--居中-->
+                                    <a class="btn" data-edit="justifyright" title="Align Right (Ctrl/Cmd+R)"><i class="icon-align-right"></i></a><!--右对齐-->
+                                    <a class="btn" data-edit="justifyfull" title="Justify (Ctrl/Cmd+J)"><i class="icon-align-justify"></i></a><!--垂直对齐-->
+                                </div>
+                                <div class="btn-group">
+                                    <a class="btn dropdown-toggle" data-toggle="dropdown" title="Hyperlink"><i class="icon-link"></i></a><!-- 链接-->
+                                    <div class="dropdown-menu input-append">
+                                        <input class="span2" placeholder="URL" type="text" data-edit="createLink"/>
+                                        <button class="btn" type="button">Add</button>
+                                    </div>
+                                    <a class="btn" data-edit="unlink" title="Remove Hyperlink"><i class="icon-cut"></i></a>
+                                </div>
+                                <div class="btn-group">
+                                    <a class="btn" title="Insert picture (or just drag & drop)" id="pictureBtn"><i class="icon-picture"></i></a>
+                                    <input type="file" data-role="magic-overlay" data-target="#pictureBtn" data-edit="insertImage" />
+                                </div>
+                                <div class="btn-group">
+                                    <a class="btn" data-edit="undo" title="Undo (Ctrl/Cmd+Z)"><i class="icon-undo"></i></a><!--撤销-->
+                                    <a class="btn" data-edit="redo" title="Redo (Ctrl/Cmd+Y)"><i class="icon-repeat"></i></a><!--恢复-->
+                                </div>
+                                <input type="text" data-edit="inserttext" id="voiceBtn" x-webkit-speech="">
+                            </div>
+                                <div  style="height: 50px;"></div>
+                            <div id="editor" style="text-align: left">
+                                文章内容。。。。。<h1>开发中，此富文本编辑器暂不支持提交数据</h1>
+                            </div>
+
+                            </div>
+
+
+                            <label class="col-sm-4 control-label">文章内容：</label>
                             <div class="col-sm-6">
-                                <input  class="form-control"  v-model="bean.note" />
+                                <input class="form-control" v-model="bean.note"/>
                             </div>
                         </div>
                         <div class="form-group">
-                            <label  class="col-sm-4 control-label">文章类型：</label>
+                            <label class="col-sm-4 control-label">文章类型：</label>
                             <div class="col-sm-6">
                                 <select class="form-control" v-model="bean.note_type">
                                     <option v-for="type in types" v-bind:value="type">
@@ -142,75 +272,28 @@
                             </div>
                         </div>
                         <div class="form-group">
-                            <label  class="col-sm-4 control-label">图片上传 ：</label>
+                            <label class="col-sm-4 control-label">图片上传 ：</label>
                             <div class="col-sm-6">
-                                <input id="image"   type="file" @change="getImage($event)">
+                                <input id="image" type="file" @change="getImage($event)">
                             </div>
                         </div>
                         <div class="form-group">
-                            <label  class="col-sm-4 control-label">视频上传 ：</label>
+                            <label class="col-sm-4 control-label">视频上传 ：</label>
                             <div class="col-sm-6">
-                                <input id="video" type="file"  @change="getVideo($event)">
+                                <input id="video" type="file" @change="getVideo($event)">
                             </div>
                         </div>
                         <div class="=form-group">
                             <button class="btn btn-primary" type="button" @click="add">增加</button>
                         </div>
+
+
                     </form>
-                    <div>
-                        <!--<form style="width: 500px;margin: auto">-->
-                            <!--<table>-->
-                                <!--<tr>-->
-                                    <!--<td>文章标题：</td>-->
-                                    <!--<td><input v-model="bean.note_title"></td>-->
-                                <!--</tr>-->
-                                <!--<tr>-->
-                                    <!--<td>文章内容：</td>-->
-                                    <!--<td><input v-model="bean.note"></td>-->
-                                <!--</tr>-->
-                                <!--<tr>-->
-                                    <!--<td>-->
-                                        <!--文章类型：-->
-                                    <!--</td>-->
-                                    <!--<td>-->
-                                        <!--<select v-model="bean.note_type">-->
-                                            <!--<option v-for="type in types" v-bind:value="type">-->
-                                                <!--{{type.name}}-->
-                                            <!--</option>-->
-                                        <!--</select>-->
-                                    <!--</td>-->
-                                <!--</tr>-->
-                                <!--<tr>-->
-                                    <!--<td>图片上传 ：</td>-->
-                                    <!--<td><input id="image" type="file" @change="getImage($event)"></td>-->
-                                <!--</tr>-->
-                                <!--<tr>-->
-                                    <!--<td>视频上传 ：</td>-->
-                                    <!--<td><input id="video" type="file" @change="getVideo($event)"></td>-->
-                                <!--</tr>-->
-
-
-                                <!--&lt;!&ndash;<tr>&ndash;&gt;-->
-                                <!--&lt;!&ndash;<td>文章类型：</td>&ndash;&gt;-->
-                                <!--&lt;!&ndash;<td><select v-model="bean.role">&ndash;&gt;-->
-                                <!--&lt;!&ndash;<option>管理员</option>&ndash;&gt;-->
-                                <!--&lt;!&ndash;<option>新闻投稿员</option>&ndash;&gt;-->
-                                <!--&lt;!&ndash;<option>新闻审核员</option>&ndash;&gt;-->
-                                <!--&lt;!&ndash;</select>&ndash;&gt;-->
-                                <!--&lt;!&ndash;</td>&ndash;&gt;-->
-                                <!--&lt;!&ndash;</tr>&ndash;&gt;-->
-                                <!--<tr>-->
-                                    <!--<td colspan="2" align="center">-->
-                                        <!--<button class="btn btn-primary" type="button" @click="add">增加</button>-->
-                                    <!--</td>-->
-                                <!--</tr>-->
-                            <!--</table>-->
-                        <!--</form>-->
-                    </div>
-                </div>
-                <!--栅栏布局9列结束-->
+                    <!--栅栏布局9列结束-->
+                  </div>
             </div>
         </div>
+
     </div>
 </div>
 

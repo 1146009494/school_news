@@ -91,11 +91,6 @@
         </dependency>
 
         <!--bootstrap依赖-->
-        <!--       <dependency>
-               <groupId>org.webjars</groupId>
-               <artifactId>jquery</artifactId>
-               <version>3.3.1</version>
-           </dependency>-->
         <dependency>
             <groupId>org.webjars</groupId>
             <artifactId>jquery</artifactId>
@@ -106,6 +101,7 @@
             <artifactId>bootstrap</artifactId>
             <version>3.0.1</version>
         </dependency>
+
     </dependencies>
 
     <build>
