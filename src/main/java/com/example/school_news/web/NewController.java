@@ -14,6 +14,7 @@ import org.springframework.web.multipart.MultipartFile;
 
 import javax.servlet.http.HttpServletRequest;
 import java.util.Date;
+/*新闻相关的后台方法*/
 
 @RestController
 public class NewController {

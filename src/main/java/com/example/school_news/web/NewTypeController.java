@@ -6,6 +6,7 @@ import com.example.school_news.util.Page4Navigator;
 import com.example.school_news.util.Result;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
+/*新闻类型相关的后台方法*/
 
 @RestController
 public class NewTypeController {
