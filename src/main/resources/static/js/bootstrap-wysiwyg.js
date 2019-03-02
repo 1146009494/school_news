@@ -15,7 +15,17 @@
 		fReader.readAsDataURL(fileInfo); //转码图片
 		return loader.promise();  //返回promise
 	};
-	/*清空内容*/
+    // /*图片保存*/
+    // var readFileIntoDataUrl = function (fileInfo) {
+     //    var form = new FormData();
+     //    form.append("editorImage", fileInfo);
+     //    var xhr = new XMLHttpRequest();
+     //    xhr.open("post", "/addImg", false);//这里是你传到后台的入库的方法，这个方法返回图片路径就可以了
+     //    xhr.send(form);
+     //    return xhr.responseText;
+    // };
+
+    /*清空内容*/
 	$.fn.cleanHtml = function () {
 		var html = $(this).html();
 		return html && html.replace(/(<br>|\s|<div><br><\/div>|&nbsp;)*$/, '');
