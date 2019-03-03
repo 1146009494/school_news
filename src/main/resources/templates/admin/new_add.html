@@ -76,16 +76,12 @@
                         //                        console.log(vue.types);
                     })
                 },
-                /*测试富文本编辑器内容获取*/
-                testAdd: function () {
-                    this.bean.note = $('#editor').html();
-                    console.log(this.bean.note);
-                },
+
                 add: function () {
                     console.log(this.bean);
                     var url = this.uri;
-                    var formData = new FormData();
 
+                    var formData = new FormData();
                     formData.append("user_write", this.bean.user_write.id);
 //                    formData.append("refer_time", this.bean.refer_time);
                     formData.append("note_title", this.bean.note_title);
@@ -122,73 +118,96 @@
                         if (response.data.code == 0) location.href = "fore_login";
                     });
                 },
+                /*测试富文本编辑器内容获取*/
+                testAdd: function () {
+                    var index = uploadFiles.length;
+                    uploadImgs(index);
+
+//                    alert(this.bean.note);
+//                    this.bean.note = $("#editor").html();
+//                    console.log(this.bean.note);
+                },
             }
         });
-    });
-</script>
-<!--富文本编辑器-->
-<script>
-    // 照片路径保存
-    var uploadFiles = [];
-    // 监听选取照片的按钮<input type="file" data-role="magic-overlay" data-target="#pictureBtn" data-edit="insertImage" />，
-    // 把每次选取的照片文件放入数组中
-    $("#descripitionImg").change(function(){
-        $.each(this.files,function(index,fileObj){
-            uploadFiles.push(fileObj);
-            alert("新增一张照片");
+
+
+        /*富文本编辑器*/
+
+
+        // 照片路径保存
+        var uploadFiles = [];
+        // 监听选取照片的按钮<input type="file" data-role="magic-overlay" data-target="#pictureBtn" data-edit="insertImage" />，
+        // 把每次选取的照片文件放入数组中
+        $("#descripitionImg").change(function () {
+            $.each(this.files, function (index, fileObj) {
+                uploadFiles.push(fileObj);
+//                alert("1");
+            });
         });
-    });
 
-    /*转码图片*/
-    var readFileIntoDataUrl = function (fileInfo) {
-        var loader = $.Deferred(),  //jq延迟对象
-            fReader = new FileReader();
-        fReader.onload = function (e) {
-            loader.resolve(e.target.result);
+        /*转码图片*/
+        var readFileIntoDataUrl = function (fileInfo) {
+            var loader = $.Deferred(),  //jq延迟对象
+                fReader = new FileReader();
+            fReader.onload = function (e) {
+                loader.resolve(e.target.result);
+            };
+            fReader.onerror = loader.reject; //拒绝
+            fReader.onprogress = loader.notify;
+            fReader.readAsDataURL(fileInfo); //转码图片
+            return loader.promise();  //返回promise
         };
-        fReader.onerror = loader.reject; //拒绝
-        fReader.onprogress = loader.notify;
-        fReader.readAsDataURL(fileInfo); //转码图片
-        return loader.promise();  //返回promise
-    };
 
-    function uploadImgs(index){
-        // 使用FormData对象上传文件
-        // 这里上传使用递归上传，上传一个再次调用函数本身，再次上传，知道全部上传完成
-        var formData = new FormData();
-        if(0 >= index){
-            // 再次上传文本编辑器里的内容
-        }else{
-            //console.log('执行照片提交。。。。。。。。。。。。。。。。。。。。。。。。。。。。。。。。');
-            index -=1;
-            formData.append(uploadFiles[index].name,uploadFiles[index]);
-            var xhr = new XMLHttpRequest();
-            xhr.open("POST",FILEUPLOAD_URL2,true);
-            xhr.send(formData);
-            xhr.onload = function(data){
-                // 判断图片是否存在
-                var imgTag = [];
-                readFileIntoDataUrl(uploadFiles[index]).done(function (dataUrl) {
-                    imgTag = $("#editor").find("img[src='" + dataUrl + "']");
-                    if (imgTag.length > 0) {
-                        // 图片存在, 上传当前文件.
-                        // uploadImage方法为你的上传图片方法.
-                        var url = JSON.parse(data.currentTarget.response).resMsg;
-                        imgTag.attr("src", url);
-                        // 重新调用函数
-                        uploadImgs(index);
+        function uploadImgs(index) {
+            // 使用FormData对象上传文件
+            // 这里上传使用递归上传，上传一个再次调用函数本身，再次上传，知道全部上传完成
+            var formData = new FormData();
+            if (0 >= index) {
+                // 再次上传文本编辑器里的内容
+//                alert("设置完值之前：" + $("#editor").html());
+//                $("#note").attr("value", $("#editor").html());
+//                $("#textarea").attr("value", $("#editor").html());
+//                $("#note[value]").val($("#editor").html());
+//                alert("设置完值之后：" + $("#note").val());
+                vue.bean.note = $("#editor").html();
+                alert("note:" + vue.bean.note);
+                vue.add();
+//            $("#ptext").val($("#editor").html());
+            } else {
+                //console.log('执行照片提交。。。。。。。。。。。。。。。。。。。。。。。。。。。。。。。。');
+                index -= 1;
+                formData.append("editorImage", uploadFiles[index]);
+                var xhr = new XMLHttpRequest();
+                xhr.open("POST", "addImg", true);
+                xhr.send(formData);
+                xhr.onload = function (data) {
+                    // 判断图片是否存在
+                    var imgTag = [];
+                    readFileIntoDataUrl(uploadFiles[index]).done(function (dataUrl) {
+                        imgTag = $("#editor").find("img[src='" + dataUrl + "']");
+                        if (imgTag.length > 0) {
+                            // 图片存在, 上传当前文件.
+                            // uploadImage方法为你的上传图片方法.
+                            var url = JSON.parse(data.currentTarget.response).data;
+                            imgTag.attr("src", url);
+                            alert(url);
+                            // 重新调用函数
+                            uploadImgs(index);
 
-                    }
+                        }
 
-                });
+                    });
+                }
             }
         }
-    }
 
+        /*提交表单*/
+//        function testAdd() {
+//            var index = uploadFiles.length;
+//            alert(index);
+//            uploadImgs(index);
+//        }
 
-
-
-    $(function () {
         function initToolbarBootstrapBindings() {
             var fonts = ['Serif', 'Sans', 'Arial', 'Arial Black', 'Courier',
                     'Courier New', 'Comic Sans MS', 'Helvetica', 'Impact', 'Lucida Grande', 'Lucida Sans', 'Tahoma', 'Times',
@@ -238,6 +257,13 @@
         initToolbarBootstrapBindings();
         $('#editor').wysiwyg({fileUploadError: showErrorAlert});
     });
+
+
+</script>
+<!--富文本编辑器-->
+<script>
+
+
 </script>
 <body>
 <div>
@@ -269,7 +295,7 @@
                         <div class="form-group">
                             <label class="col-sm-4 control-label">文章标题：</label>
                             <div class="col-sm-6">
-                                <input class="form-control" v-model="bean.note_title"/>
+                                <input  class="form-control" v-model="bean.note_title"/>
                             </div>
                         </div>
                         <div class="form-group">
@@ -335,7 +361,8 @@
                                     <div class="btn-group">
                                         <a class="btn" title="Insert picture (or just drag & drop)" id="pictureBtn"><i
                                                 class="icon-picture"></i></a>
-                                        <input type="file" data-role="magic-overlay" data-target="#pictureBtn"
+                                        <input id="descripitionImg" type="file" data-role="magic-overlay"
+                                               data-target="#pictureBtn"
                                                data-edit="insertImage"/>
                                     </div>
                                     <div class="btn-group">
@@ -347,17 +374,18 @@
                                     <input type="text" data-edit="inserttext" id="voiceBtn" x-webkit-speech="">
                                 </div>
                                 <div style="height: 50px;"></div>
-                                <div id="editor" style="text-align: left">
-                                    <h1>开发中，此富文本编辑器暂不支持提交数据</h1>
+                                <div id="editor" style="text-align: left" th:placeholder="'文章内容'">
+
                                 </div>
+                                <p id="ptext"></p>
 
                             </div>
 
 
-                            <label class="col-sm-4 control-label">文章内容：</label>
-                            <div class="col-sm-6">
-                                <input class="form-control" v-model="bean.note"/>
-                            </div>
+                            <!--<label class="col-sm-4 control-label">文章内容：</label>-->
+                            <!--<div class="col-sm-6">-->
+                                <!--<input class="form-control" v-model="bean.note"/>-->
+                            <!--</div>-->
                         </div>
                         <div class="form-group">
                             <label class="col-sm-4 control-label">文章类型：</label>
@@ -382,13 +410,13 @@
                             </div>
                         </div>
                         <div class="=form-group">
-                            <button class="btn btn-primary" type="button" @click="add">增加</button>
-                            <button class="btn btn-primary" type="button" @click="testAdd">测试富文本数据</button>
+                            <button class="btn btn-primary" type="button" @click="testAdd">增加</button>
+                            <!--<button class="btn btn-primary" type="button" @click="testAdd">测试富文本数据</button>-->
                         </div>
+                        <!--<xmp>-->
+                        <!--<textarea id="textarea" style="height: 250px;width: 400px;" v-html="this.bean.note">-->
 
-                        <textarea style="height: 250px;width: 400px;" v-model="this.bean.note">
-
-                        </textarea>
+                        <!--</textarea></xmp>-->
 
                     </form>
                     <!--栅栏布局9列结束-->

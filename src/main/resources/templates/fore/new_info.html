@@ -153,11 +153,11 @@
                 <!--网页新闻展示列表左侧占8个栅格-->
                 <div class=" col-md-8 col-sm-8 col-xs-8 column">
                     <div class="col-md-offset-1 col-md-11 col-sm-11 col-xs-11" style="background-color: #D1CCC8;height:1000px">
-                        <h3 class="text-center">
+                        <h3 class="text-center" >
                             <b>{{bean.note_title}}</b>
                         </h3>
-                        <p>
-                            {{bean.note}}
+                        <p style="width:100%">
+                            <span v-html="bean.note" ></span>
                         </p>
                     </div>
                 </div>
@@ -244,7 +244,7 @@
                 getNew: function () {
                     var url = this.uri + "/" + nid;
                     axios.get(url).then(function (response) {
-                        console.log(response.data.data);
+                        console.log(response);
                         vue.bean = response.data.data;
                     })
                 },

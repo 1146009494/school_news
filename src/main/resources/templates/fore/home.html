@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="en" xmlns:v-bind="http://www.w3.org/1999/xhtml">
 <html lang="en" xmlns:th="http://www.thymeleaf.org">
 <head>
     <meta charset="UTF-8">
@@ -166,9 +166,10 @@
                             </div>
                             <div class="row  clearfix">
                                 <div class="col-md-12  column">
-                                    <p style="width: 700px;white-space: nowrap;text-overflow: ellipsis; overflow: hidden;"
+                                    <p  style="width: 700px;white-space: nowrap;text-overflow: ellipsis; overflow: hidden;"
                                        :title="bean.note">
-                                        {{bean.note}}</p>
+                                       {{bean.note}} </p>
+
                                 </div>
                             </div>
                             <div class="row clearfix">

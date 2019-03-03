@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="en" xmlns:th="http://www.w3.org/1999/xhtml">
 <head>
     <meta charset="UTF-8">
     <title>富文本编辑器测试</title>
@@ -89,7 +89,8 @@
     Go ahead…
 </div>
 <button onclick="add()">上传表单</button>
-<img src="http://localhost:8080/E:/project/school_news/target/classes/static/news/imgstatic/news/imgFFPiLIFTVl.jpg">
+<!--<img src="news/img/OqzZxeWZEP.jpg">-->
+<p  id="text" style="height: 300px;width: 500px"></p>
 <script>
 
 
@@ -123,11 +124,10 @@
         var formData = new FormData();
         if (0 >= index) {
             // 再次上传文本编辑器里的内容
-alert($('#editor').html());
+            $("#text[utext]").val($('#editor').html());
         } else {
             //console.log('执行照片提交。。。。。。。。。。。。。。。。。。。。。。。。。。。。。。。。');
             index -= 1;
-            alert(index);
             formData.append("editorImage", uploadFiles[index]);
             var xhr = new XMLHttpRequest();
             xhr.open("POST", "addImg", true);
@@ -142,7 +142,6 @@ alert($('#editor').html());
                         // 图片存在, 上传当前文件.
                         // uploadImage方法为你的上传图片方法.
                         var url = JSON.parse(data.currentTarget.response).data;
-                        alert(url);
                         imgTag.attr("src", url);
                         // 重新调用函数
                         uploadImgs(index);
