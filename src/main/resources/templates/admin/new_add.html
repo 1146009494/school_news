@@ -1,8 +1,10 @@
 <!--新闻增加界面-->
 
 <!DOCTYPE html>
-<html lang="en" xmlns:th="http://www.thymeleaf.org" xmlns:v-bind="http://www.w3.org/1999/xhtml">
+<html lang="en" xmlns:th="http://www.thymeleaf.org" >
 <head>
+    <meta charset="UTF-8">
+    <title></title>
     <script src="webjars/jquery/2.0.0/jquery.min.js"></script>
     <link href="webjars/bootstrap/3.0.1/css/bootstrap.min.css" rel="stylesheet">
     <script src="webjars/bootstrap/3.0.1/js/bootstrap.min.js"></script>
@@ -28,17 +30,15 @@
     <!--<script src="http://cdn.bootcss.com/twitter-bootstrap/2.3.1/js/bootstrap.min.js"></script>-->
     <!--<script src="webjars/bootstrap/3.0.1/js/bootstrap.min.js"></script>-->
     <script src="js/bootstrap-wysiwyg.js"></script>
+
+    <!--数据校验插件静态资源文件-->
+    <script src="js/bootstrapValidator.min.js"></script>
+    <link href="css/bootstrapValidator.min.css" rel="stylesheet">
 </head>
 
 <style>
     div.container div.row div {
         margin: 5px 0px;
-
-    }
-
-    div.container div.row div {
-        /*background-color: lightgray;*/
-        /*border: 1px solid gray;*/
         text-align: center;
     }
 </style>
@@ -122,6 +122,8 @@
                 },
                 /*测试富文本编辑器内容获取*/
                 testAdd: function () {
+                    if(this.bean.note_title==""||this.bean.note==""||this.bean.note_type=="")
+                        return;
                     var index = uploadFiles.length;
                     uploadImgs(index);
 
@@ -265,18 +267,72 @@
 <!--富文本编辑器-->
 <script>
 
+</script>
 
+<!--bootstrapvalidator数据校验-->
+<!--由于select和editor div没办法校验 这里暂不使用表单数据校验-->
+<script>
+    $(function () {
+        $('form').bootstrapValidator({
+
+            message: 'This value is not valid',
+//            excluded: [':disabled'],
+            feedbackIcons: {
+                valid: 'glyphicon glyphicon-ok',
+                invalid: 'glyphicon glyphicon-remove',
+                validating: 'glyphicon glyphicon-refresh'
+            },
+            fields: {
+                note_title: {
+                    message: '用户信息输入有误',
+                    validators: {
+                        notEmpty: {
+                            message: '请输入一个文章标题'
+                        }
+                    }
+                },
+                note_type:{
+                    message :'角色验证失败',
+                    validators: {
+                        notEmpty: {
+                            message: '请选择一个文章类型'
+                        },
+                        callback: {
+//                            message: '必须选择一个文章类型',
+                            callback: function (value, validator) {
+                                if (value == -1) {
+                                    return false;
+                                } else {
+                                    return true;
+                                }
+
+                            }
+                        }
+                    }
+                },
+                /*富文本框的校验*/
+//                note: {
+//                    validators: {
+//                        notEmpty: {
+//                            message: "文章内容不能为空"
+//                        }
+//                    }
+//                }
+
+            }
+        });
+    });
 </script>
 <body>
 <div>
     <div id="workingArea">
-
         <div class="container">
             <div class="row">
                 <!--栅栏布局12列开始-->
                 <div class="col-md-12">
                     <div th:replace="include/admin/adminNavigator::html"></div>
                 </div>
+
 
                 <!--面包屑导航-->
                 <div class="col-md-12" style="text-align: left">
@@ -293,17 +349,17 @@
                 </div>
                 <!--栅栏布局9列开始-->
                 <div class="col-md-9 ">
+
                     <form class="form-horizontal" role="form">
                         <div class="form-group">
-                            <label class="col-sm-4 control-label">文章标题：</label>
-                            <div class="col-sm-6">
-                                <input  class="form-control" v-model="bean.note_title"/>
+                            <label class="col-md-offset-1 col-md-4 control-label">文章标题：</label>
+                            <div class="col-md-6">
+                                <input name="note_title" class="form-control" v-model="bean.note_title"/>
                             </div>
                         </div>
                         <div class="form-group">
-
                             <div class="col-md-12">
-                                <!--<div  style="height: 50px;"></div>-->
+                                <div  style="height: 30px;"></div>
                                 <!--这里加上是为了让提示信息显示 不然会被遮挡-->
                                 <div class="btn-toolbar" data-role="editor-toolbar" data-target="#editor">
                                     <div class="btn-group">
@@ -376,50 +432,47 @@
                                     <input type="text" data-edit="inserttext" id="voiceBtn" x-webkit-speech="">
                                 </div>
                                 <div style="height: 50px;"></div>
-                                <div id="editor" style="text-align: left" th:placeholder="'文章内容'">
+                                <div name="note" id="editor" style="text-align: left ;height: 300px">
 
                                 </div>
-                                <p id="ptext"></p>
 
                             </div>
 
 
-                            <!--<label class="col-sm-4 control-label">文章内容：</label>-->
-                            <!--<div class="col-sm-6">-->
-                                <!--<input class="form-control" v-model="bean.note"/>-->
+                            <!--<label class="col-md-4 control-label">文章内容：</label>-->
+                            <!--<div class="col-md-6">-->
+                            <!--<input class="form-control" v-model="bean.note"/>-->
                             <!--</div>-->
                         </div>
                         <div class="form-group">
-                            <label class="col-sm-4 control-label">文章类型：</label>
-                            <div class="col-sm-6">
-                                <select class="form-control" v-model="bean.note_type">
-                                    <option v-for="type in types" v-bind:value="type">
+                            <label class="col-md-offset-2 col-md-4 control-label">文章类型：</label>
+                            <div class="col-md-3">
+                                <select name="note_type" class="form-control" v-model="bean.note_type">
+                                    <option selected="selected" value="" disabled="disabled">选一个，兄弟</option>
+                                    <option v-for="type in types" :value="type">
                                         {{type.name}}
                                     </option>
                                 </select>
                             </div>
                         </div>
+                        <!--<div class="form-group">-->
+                        <!--<label class="col-md-4 control-label">图片上传 ：</label>-->
+                        <!--<div class="col-md-6">-->
+                        <!--<input id="image" type="file" @change="getImage($event)">-->
+                        <!--</div>-->
+                        <!--</div>-->
+                        <!--<div class="form-group">-->
+                        <!--<label class="col-md-4 control-label">视频上传 ：</label>-->
+                        <!--<div class="col-md-6">-->
+                        <!--<input id="video"  type="file" @change="getVideo($event)">-->
+                        <!--</div>-->
+                        <!--</div>-->
                         <div class="form-group">
-                            <label class="col-sm-4 control-label">图片上传 ：</label>
-                            <div class="col-sm-6">
-                                <input id="image" type="file" @change="getImage($event)">
+                            <div class="col-md-11">
+                                <button class="btn btn-primary" type="submit" @click="testAdd">增加</button>
                             </div>
-                        </div>
-                        <div class="form-group">
-                            <label class="col-sm-4 control-label">视频上传 ：</label>
-                            <div class="col-sm-6">
-                                <input id="video" type="file" @change="getVideo($event)">
-                            </div>
-                        </div>
-                        <div class="=form-group">
-                            <button class="btn btn-primary" type="button" @click="testAdd">增加</button>
                             <!--<button class="btn btn-primary" type="button" @click="testAdd">测试富文本数据</button>-->
                         </div>
-                        <!--<xmp>-->
-                        <!--<textarea id="textarea" style="height: 250px;width: 400px;" v-html="this.bean.note">-->
-
-                        <!--</textarea></xmp>-->
-
                     </form>
                     <!--栅栏布局9列结束-->
                 </div>
@@ -428,6 +481,5 @@
 
     </div>
 </div>
-
 </body>
 </html>

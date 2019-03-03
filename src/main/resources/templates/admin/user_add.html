@@ -3,24 +3,34 @@
 
 <!DOCTYPE html>
 <html lang="en" xmlns:th="http://www.thymeleaf.org">
-<head th:include="include/admin/adminHeader::html('管理员')"></head>
+<head>
+    <meta charset="UTF-8">
+    <title></title>
+    <script src="webjars/jquery/2.0.0/jquery.min.js"></script>
+    <link href="webjars/bootstrap/3.0.1/css/bootstrap.min.css" rel="stylesheet">
+    <script src="webjars/bootstrap/3.0.1/js/bootstrap.min.js"></script>
+    <script src="js/vue/2.5.16/vue.min.js"></script>
+    <script src="js/axios/0.17.1/axios.min.js"></script>
+    <script src="js/moment/2.22.2/moment.js"></script> <!-- vue.js 格式化日期用的 -->
+    <!--数据校验插件静态资源文件-->
+    <script src="js/bootstrapValidator.min.js"></script>
+    <link href="css/bootstrapValidator.min.css" rel="stylesheet">
+
+
+</head>
 
 <style>
     div.container div.row div {
         margin: 5px 0px;
-
-    }
-
-    div.container div.row div {
-        /*background-color: lightgray;*/
-        /*border: 1px solid gray;*/
         text-align: center;
     }
 </style>
 
+
 <script type="text/javascript">
         $(function () {
             /*文档加载开始*/
+
             var data4Vue = {
                 uri: "user",
                 bean: {id: "", name: "", password: "",realname:"",phone:"",role:""}
@@ -32,6 +42,11 @@
                 data: data4Vue,
                 methods: {
                     add: function () {
+                        /*无内容直接提交验证*/
+                        if(this.bean.name==''||this.bean.password==''||this.bean.role=='')
+                            return;
+
+
                         var url = this.uri;
                         var formData = new FormData();
                         formData.append("name", this.bean.name);
@@ -58,11 +73,74 @@
                     },
                 }
             });
+
+
         });
 
 
     </script>
 
+<!--表单校验-->
+<script>
+    $(function () {
+        $('form').bootstrapValidator({
+            message: 'This value is not valid',
+            feedbackIcons: {
+                valid: 'glyphicon glyphicon-ok',
+                invalid: 'glyphicon glyphicon-remove',
+                validating: 'glyphicon glyphicon-refresh'
+            },
+            fields: {
+                username: {
+                    message: '用户名验证失败',
+                    validators: {
+                        notEmpty: {
+                            message: '用户名不能为空'
+                        },
+                        stringLength: {
+                            min: 6,
+                            max: 18,
+                            message: '用户名长度必须在6到18位之间'
+                        },
+                        regexp: {
+                            regexp: /^[a-zA-Z0-9_]+$/,
+                            message: '用户名只能包含大写、小写、数字和下划线'
+                        }
+                    }
+                },
+                password: {
+                    validators: {
+                        notEmpty: {
+                            message: '密码不能为空'
+                        }
+                    }
+                },
+                role:{
+                    message :'角色验证失败',
+                    validators:{
+                        notEmpty:{
+                            message:'角色不能为空'
+                        },
+                        callback: {
+                            callback: function(value, validator) {
+
+                                if (value == -1) {
+                                    return false;
+                                } else {
+                                    return true;
+                                }
+
+                            }
+                        }
+                    }
+                },
+            },
+            submitHandler: function (validator, form, submitButton) {
+                alert("submit");
+            }
+        });
+    });
+</script>
 <body>
 <div id="workingArea">
     <div class="container">
@@ -89,40 +167,42 @@
                         <div class="form-group">
                             <label class="col-sm-4 control-label">用户名：</label>
                             <div class="col-sm-6">
-                                <input  class="form-control"  v-model="bean.name"/>
+                                <input name="username" class="form-control"  v-model="bean.name" />
                             </div>
                         </div>
                         <div class="form-group">
                             <label  class="col-sm-4 control-label">密码：</label>
                             <div class="col-sm-6">
-                                <input  class="form-control"  v-model="bean.password" />
+                                <input name="password" class="form-control"  v-model="bean.password" />
                             </div>
                         </div>
                         <div class="form-group">
                             <label  class="col-sm-4 control-label">手机号：</label>
                             <div class="col-sm-6">
-                                <input  class="form-control"  v-model="bean.phone" />
+                                <input placeholder="选填" class="form-control"  v-model="bean.phone" />
                             </div>
                         </div>
                         <div class="form-group">
                             <label  class="col-sm-4 control-label">姓名：</label>
                             <div class="col-sm-6">
-                                <input  class="form-control"  v-model="bean.realname" />
+                                <input placeholder="选填" class="form-control"  v-model="bean.realname" />
                             </div>
                         </div>
                         <div class="form-group">
                             <label  class="col-sm-4 control-label">角色：</label>
                             <div class="col-sm-6">
                                 <!--<input  class="form-control" disabled="disabled" v-model="bean.role" />-->
-                                <select class="form-control" v-model="bean.role">
+                                <select name="role" class="form-control" v-model="bean.role" >
+                                    <option selected="selected"  value="" disabled="disabled">请选择一个角色</option>
                                     <option>管理员</option>
                                     <option>新闻投稿员</option>
                                     <option>新闻审核员</option>
                                 </select>
                             </div>
                         </div>
-                        <div class="=form-group">
-                        <button class="btn btn-primary" type="button" @click="add">增加</button>
+                        <div class="form-group">
+                        <button type="submit" class="btn btn-primary" @click="add">增加</button>
+                        <!--<button type="submit" class="btn btn-primary" >增加</button>-->
                         </div>
                     </form>
 

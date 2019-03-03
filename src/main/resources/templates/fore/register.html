@@ -5,9 +5,14 @@
 <head>
     <meta charset="UTF-8">
     <title>注册页</title>
+    <!--bootstrap基本静态资源文件-->
     <script src="webjars/jquery/2.0.0/jquery.min.js"> </script>
     <link href="webjars/bootstrap/3.0.1/css/bootstrap.min.css" rel="stylesheet">
     <script src="webjars/bootstrap/3.0.1/js/bootstrap.min.js"> </script>
+    <!--数据校验插件静态资源文件-->
+    <script src="js/bootstrapValidator.min.js"></script>
+    <link href="css/bootstrapValidator.min.css" rel="stylesheet">
+
     <script src="js/vue/2.5.16/vue.min.js"></script>
     <script src="js/axios/0.17.1/axios.min.js"></script>
     <script src="js/moment/2.22.2/moment.js"></script> <!-- vue.js 格式化日期用的 -->
@@ -31,23 +36,9 @@
 
             },
             methods: {
-                login: function () {
-                    var url = "fore_loginPage";
-                    var formdata = new FormData();
-                    formdata.append("name", this.bean.name);
-                    formdata.append("password", this.bean.password);
-                    axios.post(url, formdata).then(function (response) {
-                        console.log(response.data);
-                        if (response.data.code == 0) location.href = "fore_home";
-                        else {
-                            alert(response.data.message);
-
-//                            location.href="test";
-                        }
-                    })
-                },
                 /*注册信息*/
                 register:function () {
+                    alert(1);
                     if(this.is_have_name){
                         alert("信息输入有误")
                     }
@@ -58,10 +49,12 @@
                         formData.append("realname", this.bean.realname);
                         formData.append("phone", this.bean.phone);
                         formData.append("role",this.bean.role);
-                        axios.post(this.uri,formData).then(function (response) {
+                        var url="user";
+                        axios.post(url,formData).then(function (response) {
                             if(response.data.code)
                             {
                                 /*注册失败*/
+                                alert("注册失败");
                             }else
                             {
                                 /*注册成功*/
@@ -90,6 +83,49 @@
         });
     });
 </script>
+<!--表单校验-->
+<script>
+    $(function () {
+        $('form').bootstrapValidator({
+            message: 'This value is not valid',
+            feedbackIcons: {
+                valid: 'glyphicon glyphicon-ok',
+                invalid: 'glyphicon glyphicon-remove',
+                validating: 'glyphicon glyphicon-refresh'
+            },
+            fields: {
+                username: {
+                    message: '用户名验证失败',
+                    validators: {
+                        notEmpty: {
+                            message: '用户名不能为空'
+                        },
+                        stringLength: {
+                            min: 6,
+                            max: 18,
+                            message: '用户名长度必须在6到18位之间'
+                        },
+                        regexp: {
+                            regexp: /^[a-zA-Z0-9_]+$/,
+                            message: '用户名只能包含大写、小写、数字和下划线'
+                        }
+                    }
+                },
+                password: {
+                    validators: {
+                        notEmpty: {
+                            message: '密码不能为空'
+                        }
+                    }
+                }
+            },
+            submitHandler: function (validator, form, submitButton) {
+                alert("submit");
+            }
+        });
+    });
+</script>
+
 <body>
 <div class="container" id="workingArea">
     <div class="row clearfix">
@@ -105,9 +141,8 @@
         </div>
         <div class="col-md-12 column">
             <div class="row clearfix">
-                <div class="col-md-3 column"></div>
                 <!--注册模块-->
-                <div class="col-md-6 column">
+                <div class="col-md-offset-3 col-md-6 column">
                     <h3 class="text-center text-info">
                         注册
                     </h3>
@@ -115,15 +150,15 @@
                         <div class="form-group">
                             <label class="col-sm-2 control-label">用户名：</label>
                             <div class="col-sm-10">
-                                <input  class="form-control"  @blur="check(bean.name)" v-model="bean.name"/>
+                                <input name="username" class="form-control"  @blur="check(bean.name)" v-model="bean.name"/>
                                 <span v-if="is_have_name">用户名已存在</span>
                                 <span v-else></span>
                             </div>
                         </div>
                         <div class="form-group">
-                            <label for="inputPassword3" class="col-sm-2 control-label">密码：</label>
+                            <label  class="col-sm-2 control-label">密码：</label>
                             <div class="col-sm-10">
-                                <input type="password" class="form-control" id="inputPassword3" v-model="bean.password" />
+                                <input type="password" name="password" class="form-control"   v-model="bean.password" />
                             </div>
                         </div>
                         <div class="form-group">
@@ -132,23 +167,14 @@
                                 <input type="role" class="form-control" disabled="disabled" v-model="bean.role" />
                             </div>
                         </div>
-                        <!--<div class="form-group">-->
-                        <!--<div class="col-sm-offset-2 col-sm-10">-->
-                        <!--<div class="checkbox">-->
-                        <!--<label><input type="checkbox" />Remember me</label>-->
-                        <!--<a href="fore_register" >forgot Password?</a>-->
-                        <!--</div>-->
-                        <!--</div>-->
-                        <!--</div>-->
                         <div class="form-group">
                             <div class="col-sm-offset-2 col-sm-10">
-                                <a  class="btn btn-primary"  @click="register">注册</a>
+                                <button type="submit" name="submit" class="btn btn-primary"  @click="register">注册</button>
                                 <a  class="btn btn-primary" href="fore_login">返回登陆</a>
                             </div>
                         </div>
                     </form>
                 </div>
-                <div class="col-md-3 column"></div>
             </div>
         </div>
     </div>

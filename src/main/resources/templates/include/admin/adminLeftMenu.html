@@ -3,7 +3,7 @@
     <ul class="nav nav-pills nav-stacked list-group" style="width:250px">
         <li  class="list-group-item" role="presentation">
             <!--<span th:text="${null=session.user}?${session.user.name}:未登录"></span>-->
-            <p th:if="${null!=session.user}">欢迎回来，[[${session.user.name}]]<small>[[${session.user.role}]]</small></p>
+            <p th:if="${null!=session.user}" class="text-muted">欢迎回来，[[${session.user.name}]]&nbsp;<b class="label label-info">[[${session.user.role}]]</b></p>
 
 
         </li>
