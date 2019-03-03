@@ -6,6 +6,9 @@ import org.springframework.web.servlet.config.annotation.WebMvcConfigurationSupp
 import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
 import org.springframework.web.servlet.config.annotation.WebMvcConfigurerAdapter;
 
+/*这里负责页面的跳转*/
+/*不带数据的那种 纯跳转*/
+
 @Configuration
 public class MyWebMvc extends WebMvcConfigurerAdapter {
     @Override

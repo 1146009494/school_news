@@ -12,7 +12,7 @@ import org.springframework.web.multipart.MultipartFile;
 import sun.net.httpserver.HttpsServerImpl;
 
 import javax.servlet.http.HttpSession;
-
+/*用户相关的后台操作*/
 @RestController
 public class UserController {
     @Autowired
