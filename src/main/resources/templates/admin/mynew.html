@@ -150,10 +150,11 @@
                                 <th>文章标题</th>
                                 <th>文章内容</th>
                                 <th>文章类型</th>
-                                <th>相关图片</th>
-                                <th>相关视频</th>
+                                <!--<th>相关图片</th>-->
+                                <!--<th>相关视频</th>-->
                                 <th>审核人</th>
                                 <th>审核时间</th>
+                                <th>审核状态</th>
                                 <!--<th>删除</th>-->
                                 <!--<th>编辑</th>-->
                             </tr>
@@ -169,16 +170,18 @@
                                 <td> <p style="width: 100px;white-space: nowrap;text-overflow: ellipsis; overflow: hidden;" :title="bean.note">
                                     {{bean.note}}</p></td>
                                 <td>{{bean.note_type.name}}</td>
-                                <td v-if="null!=bean.image_url"><img height="30px" :src="'img/news/'+bean.image_url"></td>
-                                <td v-else>无</td>
-                                <td v-if="null!=bean.video_url">
-                                    <a href="#nowhere" @click="getVideoUrl(bean.video_url)" data-toggle="modal" data-target="#myModal">
-                                        <span class="glyphicon glyphicon-list"></span></a>
-                                </td>
-                                <td v-else>无</td>
+                                <!--<td v-if="null!=bean.image_url"><img height="30px" :src="'img/news/'+bean.image_url"></td>-->
+                                <!--<td v-else>无</td>-->
+                                <!--<td v-if="null!=bean.video_url">-->
+                                    <!--<a href="#nowhere" @click="getVideoUrl(bean.video_url)" data-toggle="modal" data-target="#myModal">-->
+                                        <!--<span class="glyphicon glyphicon-list"></span></a>-->
+                                <!--</td>-->
+                                <!--<td v-else>无</td>-->
                                 <td v-if="null!=bean.user_read">{{bean.user_read.realname}}</td>
                                 <td v-else>未审核</td>
                                 <td v-if="null!=bean.auditor_time">{{bean.auditor_time|dateformat}}</td>
+                                <td v-else>null</td>
+                                <td v-if="null!=bean.user_read">{{bean.state}}</td>
                                 <td v-else>null</td>
                                 <!--<td><a href="#nowhere" @click="deleteBean(bean.id)">-->
                                 <!--<span class="glyphicon glyphicon-trash"></span></a></td>-->
@@ -194,37 +197,6 @@
                     <!--分页显示-->
                     <div th:replace="include/admin/adminPage::html"></div>
 
-                    <div class="modal fade" id="myModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
-                        <div class="modal-dialog">
-                            <div class="modal-content">
-                                <div class="modal-header">
-                                    <button data-dismiss="modal" class="close" type="button"><span aria-hidden="true">×</span><span
-                                            class="sr-only">Close</span></button>
-                                    <h4 class="modal-title" >{{video_url}}</h4>
-                                    <video v-if="null!=bean.video_url" height="600px" width="600px" :src="'video/news/'+video_url" controls preload="auto">
-                                    </video>
-                                </div>
-                                <!--<div class="modal-body">-->
-                                <!--&lt;!&ndash;<p>编辑信息</p>&ndash;&gt;-->
-                                <!--<form>-->
-                                <!--用户名：<input v-model="bean_modify.name" name="name" class="form-control" placeholder="请输入用户名">-->
-                                <!--<br>-->
-                                <!--密&nbsp码：<input v-model="bean_modify.password" name="password" class="form-control"-->
-                                <!--placeholder="请输入密码">-->
-                                <!--<br>-->
-                                <!--修改图片：<input type="file" @change="getFile($event)"/>-->
-                                <!--&lt;!&ndash;<div align="center"><a href="#" @click="" >更新</a></div>&ndash;&gt;-->
-
-                                <!--&lt;!&ndash;<input type="submit" @click="update" value="更新">&ndash;&gt;-->
-                                <!--</form>-->
-                                <!--</div>-->
-                                <!--<div class="modal-footer">-->
-                                <!--<button data-dismiss="modal" class="btn btn-default" type="button">关闭</button>-->
-                                <!--<button data-dismiss="modal" class="btn btn-primary" type="button" @click="update">提交修改</button>-->
-                                <!--</div>-->
-                            </div><!-- /.modal-content -->
-                        </div><!-- /.modal-dialog -->
-                    </div>
                 </div>
                 <!--栅栏布局9列结束-->
 

@@ -6,11 +6,13 @@ import com.example.school_news.util.FileUtils;
 import com.example.school_news.util.Page4Navigator;
 import com.example.school_news.util.Result;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpRequest;
 import org.springframework.util.ResourceUtils;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 import sun.net.httpserver.HttpsServerImpl;
 
+import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
 /*用户相关的后台操作*/
 @RestController
@@ -76,23 +78,31 @@ public class UserController {
     }
 
     @PutMapping("user/{id}")
-    public Object update(User bean, MultipartFile image) throws Exception {
-        String img_folder = "static/img/user";
-//                String img_path1 = request.getServletContext().getRealPath(img_folder);
-        String img_path = ResourceUtils.getURL("classpath:").getPath() + img_folder;
-//                String img_path =  request.getServletContext().getRealPath("") + img_folder;
-        String img_name = bean.getId() + ".jpg";
-        if (FileUtils.upload(image, img_path, img_name))
-            bean.setPortrait(img_name);
+    public Object update(User bean, MultipartFile[] image, HttpSession session) throws Exception {
+        if(image.length==0);
         else
-            return Result.fail("上传失败");
-        System.out.println("图片上传成功");
+        {
+            for (int i=0;i<image.length;i++) {
+                String img_folder = "static/img/user";
+//                String img_path1 = request.getServletContext().getRealPath(img_folder);
+                String img_path = ResourceUtils.getURL("classpath:").getPath() + img_folder;
+//                String img_path =  request.getServletContext().getRealPath("") + img_folder;
+                String img_name = bean.getId() + ".jpg";
+                if (FileUtils.upload(image[i], img_path, img_name))
+                    bean.setPortrait(img_name);
+                else
+                    return Result.fail("上传失败");
+                System.out.println("图片上传成功");
+            }
+        }
         userService.update(bean);
+        if(session.getAttribute("user")==bean.getName())session.setAttribute("user",bean);
         return Result.success();
     }
 
     @PostMapping("admin_loginPage")
-    public Object adminLogin(User bean, HttpSession session) {
+    public Object adminLogin(User bean, HttpServletRequest request) {
+        HttpSession session=request.getSession();
         User bean1 = userService.checkLogin(bean);
         if (null != bean1) {
             session.setAttribute("user", bean1);
@@ -110,7 +120,8 @@ public class UserController {
     }
 
     @PostMapping("logout")
-    public Object logout(HttpSession session) {
+    public Object logout(HttpServletRequest request) {
+        HttpSession session=request.getSession();
         session.removeAttribute("user");
         return Result.success();
     }

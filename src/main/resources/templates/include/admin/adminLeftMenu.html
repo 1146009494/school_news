@@ -1,4 +1,4 @@
-<div class="col-xs-3 " th:fragment="html" xmlns:th="http://www.w3.org/1999/xhtml">
+<div class="col-xs-3 " th:fragment="html" xmlns:th="http://www.thymeleaf.org" > <!--http://www.w3.org/1999/xhtml,-->
     <!--左侧菜单栏开始-->
     <ul class="nav nav-pills nav-stacked list-group" style="width:250px">
         <li  class="list-group-item" role="presentation">
@@ -10,6 +10,11 @@
         <!--每一个用户都有的模块-->
         <li class="list-group-item" role="presentation" >
             <a href="user_info" >个人信息管理</a>
+        </li>
+
+        <!--管理员的个人发布-->
+        <li class="list-group-item" role="presentation" >
+            <a class="list-group-item-info" href="mynew">我的发布</a>
         </li>
 
         <!--用户级别：除了管理员都有-->

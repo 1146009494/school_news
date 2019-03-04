@@ -116,57 +116,70 @@ public class NewController {
     /**
      * 新增一条新闻
      *
-     * @param bean  新闻的一些基本信息
-     * @param files 文件数组，存放新闻相关的文件（图片 和视频）
-     * @return 增加操作的反馈
-     * @throws Exception
+     * @param bean 表单信息
+     * @return 返回反馈信息
      */
     @PostMapping("/new")
-    public Object add(New bean,
-//                      MultipartFile image,
-//                      MultipartFile video,
-                      MultipartFile[] files
-    ) throws Exception {
+    public Object add(New bean){
         bean.setRefer_time(new Date());
         bean.setAuditor_time(null);
-        New bean1 = newService.addAndGet(bean);
-
-        for (int i = 0; i < files.length; i++) {
-            String filename = files[i].getOriginalFilename();
-            String name = filename.substring(filename.lastIndexOf(".") + 1);
-            if (name.equals("mp4")) {
-                String video_folder = "static/video/news";
-//                String video_path1 = request.getServletContext().getRealPath(video_folder);
-                String video_path = ResourceUtils.getURL("classpath:").getPath() + video_folder;
-//                String video_path =  request.getServletContext().getRealPath("") + video_folder;
-                // 视频名称
-//                String video_name = String.valueOf(bean1.getId());
-                String video_name = bean1.getId() + ".mp4";
-                /*上传视频*/
-                if (FileUtils.upload_video(files[i], video_path, video_name))
-                    bean1.setVideo_url(video_name);
-                else
-                    return Result.fail("上传失败");
-                System.out.println("视频上传成功");
-            } else if (name.equals("jpg")) {
-                 /*图片处理*/
-                String img_folder = "static/img/news";
-//                String img_path1 = request.getServletContext().getRealPath(img_folder);
-                String img_path = ResourceUtils.getURL("classpath:").getPath() + img_folder;
-//                String img_path =  request.getServletContext().getRealPath("") + img_folder;
-                String img_name = bean1.getId() + ".jpg";
-                if (FileUtils.upload(files[i], img_path, img_name))
-                    bean1.setImage_url(img_name);
-                else
-                    return Result.fail("上传失败");
-                System.out.println("图片上传成功");
-            }
-        }
-
-        newService.update(bean1);
-
+        newService.add(bean);
         return Result.success();
     }
+//    /**
+//     * 新增一条新闻
+//     *
+//     * @param bean  新闻的一些基本信息
+//     * @param files 文件数组，存放新闻相关的文件（图片 和视频）
+//     * @return 增加操作的反馈
+//     * @throws Exception
+//     */
+//    @PostMapping("/new")
+//    public Object add(New bean,
+////                      MultipartFile image,
+////                      MultipartFile video,
+//                      MultipartFile[] files
+//    ) throws Exception {
+//        bean.setRefer_time(new Date());
+//        bean.setAuditor_time(null);
+//        New bean1 = newService.addAndGet(bean);
+//
+//        for (int i = 0; i < files.length; i++) {
+//            String filename = files[i].getOriginalFilename();
+//            String name = filename.substring(filename.lastIndexOf(".") + 1);
+//            if (name.equals("mp4")) {
+//                String video_folder = "static/video/news";
+////                String video_path1 = request.getServletContext().getRealPath(video_folder);
+//                String video_path = ResourceUtils.getURL("classpath:").getPath() + video_folder;
+////                String video_path =  request.getServletContext().getRealPath("") + video_folder;
+//                // 视频名称
+////                String video_name = String.valueOf(bean1.getId());
+//                String video_name = bean1.getId() + ".mp4";
+//                /*上传视频*/
+//                if (FileUtils.upload_video(files[i], video_path, video_name))
+//                    bean1.setVideo_url(video_name);
+//                else
+//                    return Result.fail("上传失败");
+//                System.out.println("视频上传成功");
+//            } else if (name.equals("jpg")) {
+//                 /*图片处理*/
+//                String img_folder = "static/img/news";
+////                String img_path1 = request.getServletContext().getRealPath(img_folder);
+//                String img_path = ResourceUtils.getURL("classpath:").getPath() + img_folder;
+////                String img_path =  request.getServletContext().getRealPath("") + img_folder;
+//                String img_name = bean1.getId() + ".jpg";
+//                if (FileUtils.upload(files[i], img_path, img_name))
+//                    bean1.setImage_url(img_name);
+//                else
+//                    return Result.fail("上传失败");
+//                System.out.println("图片上传成功");
+//            }
+//        }
+//
+//        newService.update(bean1);
+//
+//        return Result.success();
+//    }
 
     /**
      * 删除某一条新闻
@@ -210,14 +223,14 @@ public class NewController {
      *
      * @param id              新闻id
      * @param state           设置的新闻状态
-     * @param user_auditor_id 审核人id
+     * @param user_read_id    审核人id
      * @throws Exception
      */
-    @PutMapping("new/{id}/{state}/{user_auditor_id}")
+    @PutMapping("new/{id}/{state}/{user_read_id}")
     public void confirm(@PathVariable("id") int id, @PathVariable("state") String state,
-                        @PathVariable("user_auditor_id") int user_auditor_id) throws Exception {
+                        @PathVariable("user_read_id") int user_read_id) throws Exception {
         New bean = newService.get(id);
-        User u = userService.get(user_auditor_id);
+        User u = userService.get(user_read_id);
         bean.setUser_read(u);
         bean.setAuditor_time(new Date());
         bean.setState(state);

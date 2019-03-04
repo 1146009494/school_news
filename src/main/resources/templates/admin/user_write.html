@@ -2,7 +2,20 @@
 
 <!DOCTYPE html>
 <html lang="en" xmlns:th="http://www.thymeleaf.org">
-<head th:include="include/admin/adminHeader::html('管理员')"></head>
+<head >
+    <meta charset="UTF-8">
+    <title></title>
+    <script src="webjars/jquery/2.0.0/jquery.min.js"></script>
+    <link href="webjars/bootstrap/3.0.1/css/bootstrap.min.css" rel="stylesheet">
+    <script src="webjars/bootstrap/3.0.1/js/bootstrap.min.js"></script>
+    <script src="js/vue/2.5.16/vue.min.js"></script>
+    <script src="js/axios/0.17.1/axios.min.js"></script>
+    <script src="js/moment/2.22.2/moment.js"></script> <!-- vue.js 格式化日期用的 -->
+    <!--数据校验插件静态资源文件-->
+    <script src="js/bootstrapValidator.min.js"></script>
+    <link href="css/bootstrapValidator.min.css" rel="stylesheet">
+
+</head>
 
 <style>
     div.container div.row div {
@@ -22,9 +35,10 @@
             uri: "user",
             pagination: {},
             beans: [],
-            bean: {id: "", name: "", password: "",realname:"",phone:"",role:"新闻投稿员"},
+            bean: {id: "", name: "", password: "",realname:"",phone:"",role:""},
             keyword: "",
             is_search: "",
+            role:"新闻投稿员"
 //            image:"",
         };
 
@@ -37,10 +51,10 @@
             },
             methods: {
                 list: function (start) {
-                    var url = this.uri+"byrole/"+this.bean.role+"?start=" + start;
+                    var url = this.uri+"byrole/"+this.role+"?start=" + start;
 //                    如果是条件查询就访问这个请求
                     if (this.is_search) {
-                        url = this.uri + "_search/"+this.bean.role+"?keyword=" + this.keyword + "&start=" + start;
+                        url = this.uri + "_search/"+this.role+"?keyword=" + this.keyword + "&start=" + start;
                     }
 
                     axios.get(url).then(function (response) {
@@ -71,10 +85,6 @@
                     })
                 },
                 update: function () {
-                    if (!isEmpty(this.bean.name, "用户名"))
-                        return;
-                    if (!isEmpty(this.bean.password, "密码"))
-                        return;
                     var url = this.uri+"/"+this.bean.id;
                     //axios.js 上传文件要用 formData 这种方式
                     var formData = new FormData();
@@ -90,7 +100,7 @@
                 },
                 search: function () {
                     this.is_search = true;
-                    var url = this.uri + "_search/"+this.bean.role+"?keyword=" + this.keyword;
+                    var url = this.uri + "_search/"+this.role+"?keyword=" + this.keyword;
                     axios.get(url).then(function (response) {
                         vue.pagination = response.data.data;
                         vue.beans = response.data.data.content;
@@ -121,10 +131,119 @@
 
         /*文档加载借宿*/
     });
-
-
 </script>
 
+<!--公共代码-->
+<script>
+    //确实是否要删除
+    function checkDeleteLink() {
+        var confirmDelete = confirm("确认要删除");
+        if (confirmDelete)
+            return true;
+        return false;
+    }
+    //跳转函数
+    function jump(page, vue) {
+        if ('first' == page && !vue.pagination.first)
+            vue.list(0);
+
+        else if ('pre' == page && vue.pagination.hasPrevious)
+            vue.list(vue.pagination.number - 1);
+
+        else if ('next' == page && vue.pagination.hasNext)
+            vue.list(vue.pagination.number + 1);
+
+        else if ('last' == page && !vue.pagination.last)
+            vue.list(vue.pagination.totalPages - 1);
+    }
+
+    //跳转函数
+    function jumpByNumber(start, vue) {
+        if (start != vue.pagination.number)
+            vue.list(start);
+    }
+</script>
+
+<!--表单校验-->
+<script>
+    $(function () {
+        $('form').bootstrapValidator({
+            message: 'This value is not valid',
+            feedbackIcons: {
+                valid: 'glyphicon glyphicon-ok',
+                invalid: 'glyphicon glyphicon-remove',
+                validating: 'glyphicon glyphicon-refresh'
+            },
+            fields: {
+                username: {
+                    message: '用户名验证失败',
+                    validators: {
+                        notEmpty: {
+                            message: '用户名不能为空'
+                        },
+                        stringLength: {
+                            min: 6,
+                            max: 18,
+                            message: '用户名长度必须在6到18位之间'
+                        },
+                        regexp: {
+                            regexp: /^[a-zA-Z0-9_]+$/,
+                            message: '用户名只能包含大写、小写、数字和下划线'
+                        }
+                    }
+                },
+                password: {
+                    validators: {
+                        notEmpty: {
+                            message: '密码不能为空'
+                        }
+                    }
+                },
+                phone: {
+                    validators: {
+                        regexp: {
+                            /*手机号1开头，第二位34578 然后11位*/
+                            regexp: /^1[3|4|5|7|8][0-9]{9}$/,
+                            message: '请输入正确的11位手机号码'
+                        }
+                    }
+                },
+                name: {
+                    validators: {
+                        regexp: {
+                            /*中文 2-7位*/
+                            regexp: /^([\u4e00-\u9fa5]){2,7}$/,
+                            message: '请输入正确的姓名'
+                        }
+                    }
+
+                },
+                role:{
+                    message :'角色验证失败',
+                    validators:{
+                        notEmpty:{
+                            message:'角色不能为空'
+                        },
+                        callback: {
+                            callback: function(value, validator) {
+
+                                if (value == -1) {
+                                    return false;
+                                } else {
+                                    return true;
+                                }
+
+                            }
+                        }
+                    }
+                },
+            },
+            submitHandler: function (validator, form, submitButton) {
+                alert("submit");
+            }
+        });
+    });
+</script>
 <body>
 <div id="workingArea">
     <div class="container">
@@ -206,22 +325,50 @@
                             </div>
                             <div class="modal-body">
                                 <!--<p>编辑信息</p>-->
-                                <form>
-                                    用户名：<input v-model="bean.name" name="name" class="form-control">
-                                    <br>
-                                    密&nbsp码：<input v-model="bean.password" name="password" class="form-control">
-                                    <br>
-                                    真实姓名：<input v-model="bean.realname" name="realname" class="form-control">
-                                    <br>
-                                    联系方式：<input v-model="bean.phone" name="phone" class="form-control">
-                                    <br>
-                                    角色：<input v-model="bean.role"  disabled="disabled" name="role" class="form-control">
+                                <form class="form-horizontal" role="form">
+                                    <div class="form-group">
+                                        <label class="col-sm-4 control-label">用户名：</label>
+                                        <div class="col-sm-6">
+                                            <input name="username" disabled="disabled" class="form-control"  v-model="bean.name" />
+                                        </div>
+                                    </div>
+                                    <div class="form-group">
+                                        <label  class="col-sm-4 control-label">密码：</label>
+                                        <div class="col-sm-6">
+                                            <input name="password" class="form-control"  v-model="bean.password" />
+                                        </div>
+                                    </div>
+                                    <div class="form-group">
+                                        <label  class="col-sm-4 control-label">手机号：</label>
+                                        <div class="col-sm-6">
+                                            <input placeholder="选填" name="phone" class="form-control"  v-model="bean.phone" />
+                                        </div>
+                                    </div>
+                                    <div class="form-group">
+                                        <label  class="col-sm-4 control-label">姓名：</label>
+                                        <div class="col-sm-6">
+                                            <input placeholder="选填" name="name" class="form-control"  v-model="bean.realname" />
+                                        </div>
+                                    </div>
+                                    <div class="form-group">
+                                        <label  class="col-sm-4 control-label">角色：</label>
+                                        <div class="col-sm-6">
+                                            <!--<input  class="form-control" disabled="disabled" v-model="bean.role" />-->
+                                            <select name="role" class="form-control" v-model="bean.role" >
+                                                <option>管理员</option>
+                                                <option>新闻投稿员</option>
+                                                <option>新闻审核员</option>
+                                            </select>
+                                        </div>
+                                    </div>
+                                    <div class="form-group">
+                                        <button data-dismiss="modal" class="btn btn-info" type="submit" @click="update">提交修改</button>
+                                        <button data-dismiss="modal" class="btn btn-info" type="button">关闭</button>
+
+                                    </div>
                                 </form>
                             </div>
-                            <div class="modal-footer">
-                                <button data-dismiss="modal" class="btn btn-default" type="button">关闭</button>
-                                <button data-dismiss="modal" class="btn btn-primary" type="button" @click="update">提交修改</button>
-                            </div>
+
                         </div><!-- /.modal-content -->
                     </div><!-- /.modal-dialog -->
                 </div>

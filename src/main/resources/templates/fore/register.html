@@ -38,7 +38,9 @@
             methods: {
                 /*注册信息*/
                 register:function () {
-                    alert(1);
+                    /*提交表单不能为空验证*/
+                    if(this.bean.name==""||this.bean.password=="")
+                        return;
                     if(this.is_have_name){
                         alert("信息输入有误")
                     }

@@ -1,7 +1,7 @@
 <!--新闻增加界面-->
 
 <!DOCTYPE html>
-<html lang="en" xmlns:th="http://www.thymeleaf.org" >
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
 <head>
     <meta charset="UTF-8">
     <title></title>
@@ -80,7 +80,8 @@
                 },
 
                 add: function () {
-                    console.log(this.bean);
+                    console.log(this.bean.note);
+                    alert(this.bean.note)
                     var url = this.uri;
 
                     var formData = new FormData();
@@ -96,16 +97,10 @@
 //                    formData.append("video", this.video);
                     formData.append("files", this.image);
                     formData.append("files", this.video);
-                    console.log(formData);
                     axios.post(url, formData, {headers: {'Content-Type': 'multipart/form-data'}})
-                        .then(function (response) {
-                            if (response.data.code != 0) {
-                                alert("增加失败");
-                            } else {
-                                alert("增加成功");
-                                this.bean = {id: "", name: "", password: "", realname: "", phone: "", role: ""};
-                            }
+                        .then(function () {
                         });
+
                 },
                 getImage: function (event) {
                     this.image = event.target.files[0];
@@ -122,9 +117,10 @@
                 },
                 /*测试富文本编辑器内容获取*/
                 testAdd: function () {
-                    if(this.bean.note_title==""||this.bean.note==""||this.bean.note_type=="")
+                    if(this.bean.note_title==""||this.bean.note_type=="")
                         return;
                     var index = uploadFiles.length;
+                    alert(index);
                     uploadImgs(index);
 
 //                    alert(this.bean.note);
@@ -174,7 +170,7 @@
 //                $("#note[value]").val($("#editor").html());
 //                alert("设置完值之后：" + $("#note").val());
                 vue.bean.note = $("#editor").html();
-                alert("note:" + vue.bean.note);
+//                alert("note:" + vue.bean.note);
                 vue.add();
 //            $("#ptext").val($("#editor").html());
             } else {
@@ -448,7 +444,6 @@
                             <label class="col-md-offset-2 col-md-4 control-label">文章类型：</label>
                             <div class="col-md-3">
                                 <select name="note_type" class="form-control" v-model="bean.note_type">
-                                    <option selected="selected" value="" disabled="disabled">选一个，兄弟</option>
                                     <option v-for="type in types" :value="type">
                                         {{type.name}}
                                     </option>
