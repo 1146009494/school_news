@@ -3,26 +3,16 @@
 <!DOCTYPE html>
 <!--<html lang="en" xmlns:v-bind="http://www.w3.org/1999/xhtml">-->
 <html lang="en" xmlns:th="http://www.thymeleaf.org">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width,initial-scale=1">
-    <title th:text="'前台首页'">首页</title>
-    <script src="webjars/jquery/2.0.0/jquery.min.js"></script>
-    <link href="webjars/bootstrap/3.0.1/css/bootstrap.min.css" rel="stylesheet">
-    <script src="webjars/bootstrap/3.0.1/js/bootstrap.min.js"></script>
+<head th:include="include/admin/adminHeader::html('首页')">
 </head>
+
 <style>
     .gray {
         background-color: #777777;
     }
-
-    /*    div{
-            border:2px red solid;
-        }*/
-
 </style>
-<body>
 
+<body>
 <div id="workingArea" class="container">
     <div class="row clearfix">
         <!--导航栏-->
@@ -209,38 +199,14 @@
             </div>
 
         </div>
+
+        <!--页脚-->
+        <div th:replace="include/admin/adminFooter::html"></div>
+
     </div>
 </div>
 
-
-<script src="js/vue/2.5.16/vue.min.js"></script>
-<script src="js/axios/0.17.1/axios.min.js"></script>
-<script src="js/moment/2.22.2/moment.js"></script> <!-- vue.js 格式化日期用的 -->
-<!--公有模块-->
-<script>
-
-    //跳转函数
-    function jump(page, vue) {
-        if ('first' == page && !vue.pagination.first)
-            vue.list(0);
-
-        else if ('pre' == page && vue.pagination.hasPrevious)
-            vue.list(vue.pagination.number - 1);
-
-        else if ('next' == page && vue.pagination.hasNext)
-            vue.list(vue.pagination.number + 1);
-
-        else if ('last' == page && !vue.pagination.last)
-            vue.list(vue.pagination.totalPages - 1);
-    }
-
-    //跳转函数
-    function jumpByNumber(start, vue) {
-        if (start != vue.pagination.number)
-            vue.list(start);
-    }
-</script>
-
+<!--前后端交互-->
 <script>
     /*时间格式化 全局过滤器*/
     Vue.filter('dateformat', function (dataStr) {
