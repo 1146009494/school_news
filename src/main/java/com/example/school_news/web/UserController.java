@@ -51,7 +51,7 @@ public class UserController {
     }
 
     @PostMapping("/user")
-    public Object add( User bean) throws Exception {
+    public Object add(User bean) throws Exception {
         userService.add(bean);
         return Result.success();
     }

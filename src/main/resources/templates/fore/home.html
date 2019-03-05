@@ -1,9 +1,7 @@
 <!--前台首页-->
 
-
-
 <!DOCTYPE html>
-<html lang="en" xmlns:v-bind="http://www.w3.org/1999/xhtml">
+<!--<html lang="en" xmlns:v-bind="http://www.w3.org/1999/xhtml">-->
 <html lang="en" xmlns:th="http://www.thymeleaf.org">
 <head>
     <meta charset="UTF-8">
@@ -17,9 +15,10 @@
     .gray {
         background-color: #777777;
     }
-/*    div{
-        border:2px red solid;
-    }*/
+
+    /*    div{
+            border:2px red solid;
+        }*/
 
 </style>
 <body>
@@ -45,11 +44,11 @@
                         </li>
 
                     </ul>
-                    <form class="navbar-form navbar-left" role="search">
+                    <form class="navbar-form navbar-left">
                         <div class="form-group">
                             <input type="text" class="form-control" v-model="keyword"/>
                         </div>
-                        <button type="submit" class="btn btn-default" @click="search">搜索</button>
+                        <button class="btn btn-default" @click="search">搜索</button>
                     </form>
                     <!--右上角登陆模块-->
                     <ul class="nav navbar-nav navbar-right">
@@ -61,11 +60,13 @@
                                 <!--用户自己上传的头像-->
                                 <span th:if="null!=${session.user.portrait}"><img height="25px"
                                                                                   width="25px"
-                                                                                  th:src="'img/user/'+${session.user.portrait}" class="img-circle"></span>
+                                                                                  th:src="'img/user/'+${session.user.portrait}"
+                                                                                  class="img-circle"></span>
                                 <!--当用户没有自己设置头像时使用默认-->
                                 <span th:unless="null!=${session.user.portrait}"><img height="25px"
                                                                                       width="25px"
-                                                                                      th:src="'img/user/default.jpg'" class="img-circle"></span>
+                                                                                      th:src="'img/user/default.jpg'"
+                                                                                      class="img-circle"></span>
                                 <strong
                                         class="caret"></strong></a>
                             <ul class="dropdown-menu">
@@ -170,9 +171,9 @@
                             </div>
                             <div class="row  clearfix">
                                 <div class="col-md-12  column">
-                                    <p  style="width: 700px;white-space: nowrap;text-overflow: ellipsis; overflow: hidden;"
+                                    <p style="width: 700px;white-space: nowrap;text-overflow: ellipsis; overflow: hidden;"
                                        :title="bean.note">
-                                       {{bean.note}} </p>
+                                        {{bean.note}} </p>
 
                                 </div>
                             </div>
@@ -215,8 +216,9 @@
 <script src="js/vue/2.5.16/vue.min.js"></script>
 <script src="js/axios/0.17.1/axios.min.js"></script>
 <script src="js/moment/2.22.2/moment.js"></script> <!-- vue.js 格式化日期用的 -->
+<!--公有模块-->
 <script>
-    /*公有模块*/
+
     //跳转函数
     function jump(page, vue) {
         if ('first' == page && !vue.pagination.first)
@@ -243,89 +245,96 @@
     /*时间格式化 全局过滤器*/
     Vue.filter('dateformat', function (dataStr) {
         return moment(dataStr).format('YYYY-MM-DD HH:mm:ss')
-    })
-    $(function () {
-        /*文档加载开始*/
+    }),
+        $(function () {
+            /*文档加载开始*/
 
-        var data4Vue = {
-            uri: "new",
-            pagination: {},
-            beans: [],
-            bean: {
-                id: 0, user_write: {realname: ""}, refer_time: "", note_type: {id: 0}, note_title: "", note: ""
-                , image_url: "", video_url: "", user_auditor: {realname: ""}, auditor_time: "", state: "审核通过"
-            },
-            state: "审核通过",
-            types: [],
-            is_search: "",
-            keyword: "",
-            size: "5",
-        };
+            var data4Vue = {
+                uri: "new",
+                pagination: {},
+                beans: [],
+                bean: {
+                    id: 0, user_write: {realname: ""}, refer_time: "", note_type: {id: 0}, note_title: "", note: ""
+                    , image_url: "", video_url: "", user_auditor: {realname: ""}, auditor_time: "", state: "审核通过"
+                },
+                state: "审核通过",
+                types: [],
+                is_search: "false",
+                keyword: "",
+                size: "5",
+            };
 
-        //ViewModel
-        var vue = new Vue({
-            el: '#workingArea',
-            data: data4Vue,
-            mounted: function () { //mounted　表示这个 Vue 对象加载成功了
-                /*初始化查询结果*/
-                this.list(0);
-                /*获取所有分类*/
-                this.getNewType();
-            },
-            methods: {
-                list: function (start) {
-                    var url = this.uri + "bystate/" + this.state + "?start=" + start + "&size=" + this.size;
+            //ViewModel
+            var vue = new Vue({
+                el: '#workingArea',
+                data: data4Vue,
+                created:function () {
+                  /*获取所有分类*/
+                    this.getNewType();
+
+                    /*初始化查询结果*/
+                    this.list(0);
+                },
+                mounted: function () { //mounted　表示这个 Vue 对象加载成功了
+
+                },
+                methods: {
+                    list: function (start) {
+                        var url = this.uri + "bystate/" + this.state + "?start=" + start + "&size=" + this.size;
 //                    如果是条件查询就访问这个请求
-                    if (this.is_search) {
-                        url = this.uri + "_search/" + this.bean.state + "?keyword=" + this.keyword + "&start=" + start;
-                    }
-                    axios.get(url).then(function (response) {
-                        console.log(response.data);
-                        vue.pagination = response.data.data;
-                        vue.beans = response.data.data.content;
-
-                    });
-                },
-                getNewType: function () {
-                    var url = "type";
-                    axios.get(url).then(function (response) {
-                        vue.types = response.data.data.content;
-                        console.log(vue.types);
-                    })
-                },
-                logout: function () {
-                    var url = "logout";
-                    axios.post(url).then(function (response) {
-                        console.log(response.data);
-                        if (response.data.code == 0) location.href = "fore_login";
-                    });
-                },
-                /*搜索框的查询*/
-                search: function () {
+                        if (this.is_search) {
+                            url = this.uri + "_search/" + this.bean.state + "?keyword=" + this.keyword + "&start=" + start+ "&size=" + this.size;
+                        }
+                        axios.get(url).then(function (response) {
+                            console.log(response.data);
+                            vue.pagination = response.data.data;
+                            vue.beans = response.data.data.content;
+                        });
+                    },
+                    getNewType: function () {
+                        var url = "type";
+                        axios.get(url).then(function (response) {
+                            vue.types = response.data.data.content;
+                        })
+                    },
+                    logout: function () {
+                        var url = "logout";
+                        axios.post(url).then(function (response) {
+                            console.log(response.data);
+                            if (response.data.code == 0) location.href = "fore_login";
+                        });
+                    },
+                    /*搜索框的查询*/
+                    search: function () {
 //                    alert(this.keyword);
-                    this.is_search = true;
-                    var url = this.uri + "_search/" + this.bean.state + "?keyword=" + this.keyword;
-                    axios.get(url).then(function (response) {
-                        vue.pagination = response.data.data;
-                        vue.beans = response.data.data.content;
-                    })
-                },
-                /*导航栏查询*/
-                search_type: function (type_name) {
-                    this.keyword = type_name;
-                    this.search();
-                },
-                jump: function (page) {
-                    jump(page, vue); //定义在adminHeader.html 中
-                },
-                jumpByNumber: function (start) {
-                    jumpByNumber(start, vue);
+                        this.is_search = true;
+                        this.list(0);
+//                        var url = this.uri + "_search/" + this.bean.state + "?keyword=" + this.keyword;
+//                        alert(url);
+//                        axios.get(url).then(function (response) {
+//                            console.log(response.data.data);
+//                            vue.pagination = response.data.data;
+//                            vue.beans = response.data.data.content;
+//
+//                        });
+//                        alert("查询结束")
+                    },
+                    /*导航栏查询*/
+                    search_type: function (type_name){
+                        this.keyword = type_name;
+                        this.search();
+                    },
+                    jump: function (page) {
+                        jump(page, vue); //定义在adminHeader.html 中
+                    },
+                    jumpByNumber: function (start) {
+                        jumpByNumber(start, vue);
+                    }
                 }
-            }
-        });
+            });
 
-        /*文档加载结束*/
-    });
+            /*文档加载结束*/
+        });
 </script>
 </body>
 </html>

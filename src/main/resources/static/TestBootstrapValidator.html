@@ -20,10 +20,14 @@
         <input type="text" class="form-control" name="email"/>
     </div>
     <div class="form-group">
-        <button type="submit" name="submit" class="btn btn-primary">Submit</button>
+        <button type="submit" name="submit" class="btn btn-primary" onclick="test">Submit</button>
     </div>
 </form>
 <script>
+    function test() {
+        alert("denglu")
+        
+    }
     $(function () {
         $('form').bootstrapValidator({
             message: 'This value is not valid',

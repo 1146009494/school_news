@@ -13,7 +13,7 @@
         </li>
 
         <!--管理员的个人发布-->
-        <li class="list-group-item" role="presentation" >
+        <li class="list-group-item" role="presentation" th:if="'管理员'==${session.user.role}" >
             <a class="list-group-item-info" href="mynew">我的发布</a>
         </li>
 

@@ -4,11 +4,14 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
+    <meta charset="utf-8">
     <title>前台登陆</title>
-    <script src="webjars/jquery/2.0.0/jquery.min.js"> </script>
+    <script src="webjars/jquery/2.0.0/jquery.min.js"></script>
     <link href="webjars/bootstrap/3.0.1/css/bootstrap.min.css" rel="stylesheet">
-    <script src="webjars/bootstrap/3.0.1/js/bootstrap.min.js"> </script>
+    <script src="webjars/bootstrap/3.0.1/js/bootstrap.min.js"></script>
+    <!--<script src="js/jquery/2.0.0/jquery.min.js"></script>-->
+    <!--<link href="css/bootstrap/3.3.6/bootstrap.min.css" rel="stylesheet">-->
+    <!--<script src="js/bootstrap/3.3.6/bootstrap.min.js"></script>-->
 
     <script src="js/bootstrapValidator.min.js"></script>
     <link href="css/bootstrapValidator.min.css" rel="stylesheet">
@@ -36,17 +39,15 @@
             methods: {
                 login: function () {
                     /*无内容提交校验*/
-                    if(this.bean.name==""||this.bean.password=="")
-                    return;
-
-
+                    if (this.bean.name == "" || this.bean.password == "")
+                        return;
                     var url = "fore_loginPage";
                     var formdata = new FormData();
                     formdata.append("name", this.bean.name);
                     formdata.append("password", this.bean.password);
                     axios.post(url, formdata).then(function (response) {
                         console.log(response.data);
-                        if (response.data.code == 0) location.href = "fore_home";
+                        if (response.data.code==0) location.href = "fore_home";
                         else {
                             /*登陆失败*/
 
@@ -56,8 +57,8 @@
                         }
                     })
                 },
-                register:function () {
-                    location.href="fore_register";
+                register: function () {
+                    location.href = "fore_register";
                 }
 
             }
@@ -70,34 +71,31 @@
 <!--bootstrapValidator表单验证-->
 <script>
     $(function () {
-        $(function () {
-            $('form').bootstrapValidator({
-
-                message: 'This value is not valid',
-                feedbackIcons: {
-                    valid: 'glyphicon glyphicon-ok',
-                    invalid: 'glyphicon glyphicon-remove',
-                    validating: 'glyphicon glyphicon-refresh'
-                },
-                fields: {
-                    username: {
-                        message: '用户名验证失败',
-                        validators: {
-                            notEmpty: {
-                                message: '用户名不能为空'
-                            }
+        $('form').bootstrapValidator({
+            message: 'This value is not valid',
+            feedbackIcons: {
+                valid: 'glyphicon glyphicon-ok',
+                invalid: 'glyphicon glyphicon-remove',
+                validating: 'glyphicon glyphicon-refresh'
+            },
+            fields: {
+                username: {
+                    message: '用户名验证失败',
+                    validators: {
+                        notEmpty: {
+                            message: '用户名不能为空'
                         }
-                    },
-                    password: {
-                        validators: {
-                            notEmpty: {
-                                message: '密码不能为空'
-                            }
+                    }
+                },
+                password: {
+                    validators: {
+                        notEmpty: {
+                            message: '密码不能为空'
                         }
                     }
                 }
-            });
-        });
+            }
+        })
     });
 </script>
 <body>
@@ -108,7 +106,11 @@
             <!--顶部导航栏-->
             <nav class="navbar  navbar-inverse " role="navigation">
                 <div class="navbar-header">
-                    <button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#bs-example-navbar-collapse-1"> <span class="sr-only">Toggle navigation</span><span class="icon-bar"></span><span class="icon-bar"></span><span class="icon-bar"></span></button> <a class="navbar-brand" href="fore_home" >小萝筐新闻网</a>
+                    <button type="button" class="navbar-toggle" data-toggle="collapse"
+                            data-target="#bs-example-navbar-collapse-1"><span
+                            class="sr-only">Toggle navigation</span><span class="icon-bar"></span><span
+                            class="icon-bar"></span><span class="icon-bar"></span></button>
+                    <a class="navbar-brand" href="fore_home">小萝筐新闻网</a>
                 </div>
 
             </nav>
@@ -128,29 +130,29 @@
                 <div class="col-md-6 column">
                     <form class="form-horizontal" role="form">
                         <div class="form-group">
-                                <label  class="col-sm-2 control-label">用户名：</label>
+                            <label class="col-sm-2 control-label">用户名：</label>
                             <div class="col-sm-10">
                                 <input type="text" class="form-control" name="username" v-model="bean.name"/>
                             </div>
                         </div>
                         <div class="form-group">
-                            <label  class="col-sm-2 control-label">密码：</label>
+                            <label class="col-sm-2 control-label">密码：</label>
                             <div class="col-sm-10">
-                                <input type="password" class="form-control" name="password" v-model="bean.password" />
+                                <input type="password" class="form-control" name="password" v-model="bean.password"/>
                             </div>
                         </div>
                         <!--<div class="form-group">-->
-                            <!--<div class="col-sm-offset-2 col-sm-10">-->
-                                <!--<div class="checkbox">-->
-                                    <!--<label><input type="checkbox" />Remember me</label>-->
-                                    <!--<a href="fore_register" >forgot Password?</a>-->
-                                <!--</div>-->
-                            <!--</div>-->
+                        <!--<div class="col-sm-offset-2 col-sm-10">-->
+                        <!--<div class="checkbox">-->
+                        <!--<label><input type="checkbox" />Remember me</label>-->
+                        <!--<a href="fore_register" >forgot Password?</a>-->
+                        <!--</div>-->
+                        <!--</div>-->
                         <!--</div>-->
                         <div class="form-group">
-                            <div class="col-sm-offset-2 col-sm-10">
-                                <button type="submit" name="submit" class="btn btn-primary" @click="login">登陆</button>
-                                <a  class="btn btn-primary"  @click="register">注册</a>
+                            <div class="col-sm-offset-1 col-sm-10" align="center">
+                                <button  class="btn btn-primary" @click="login">登陆</button>
+                                <a class="btn btn-primary" @click="register">注册</a>
                             </div>
                         </div>
                     </form>
