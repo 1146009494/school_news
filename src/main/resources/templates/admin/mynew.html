@@ -31,17 +31,17 @@
                     </ol>
                 </div>
                 <!--栅栏布局3列-->
-                <div class="col-md-3">
-                <div th:replace="include/admin/adminLeftMenu::html"></div>
-            </div>
+                <div class="col-md-3 col-sm-12 col-xs-12">
+                    <div th:replace="include/admin/adminLeftMenu::html"></div>
+                </div>
 
 
                 <!--栅栏布局9列开始-->
-                <div class="col-md-9 ">
+                <div class="col-md-9 col-sm-12 col-xs-12 ">
 
                     <!--搜索框开始-->
                     <!--<div class="container">-->
-                    <div class="input-group">
+                    <div class="  col-sm-12 col-xs-12  input-group">
                         <input type="text" v-model="keyword" class="form-control input-md" placeholder="暂不支持对审核人进行查找">
                         <span @click="search" class="input-group-addon btn btn-primary">搜索</span>
                         <span @click="all" class="input-group-addon btn btn-primary" th:text="显示全部"></span>
@@ -77,10 +77,14 @@
                                 <td>{{bean.user_write.realname}}</td>
                                 <td>{{bean.refer_time|dateformat}}</td>
                                 <!--<td><div id="dates" class="format">{{bean.refer_time}}</div></td>-->
-                                <td><p style="width: 100px;white-space: nowrap;text-overflow: ellipsis; overflow: hidden;" :title="bean.note_title">
-                                    {{bean.note_title}}</p></td>
-                                <td> <p style="width: 100px;white-space: nowrap;text-overflow: ellipsis; overflow: hidden;" :title="bean.note">
-                                    {{bean.note}}</p></td>
+                                <td>
+                                    <p style="width: 100px;white-space: nowrap;text-overflow: ellipsis; overflow: hidden;"
+                                       :title="bean.note_title">
+                                        {{bean.note_title}}</p></td>
+                                <td>
+                                    <p style="width: 100px;white-space: nowrap;text-overflow: ellipsis; overflow: hidden;"
+                                       :title="bean.note">
+                                        {{bean.note}}</p></td>
                                 <td>{{bean.note_type.name}}</td>
                                 <td>
                                     <button @click="getBean(bean.id)" type="button" class="btn btn-info"
@@ -90,9 +94,9 @@
                                 </td>
 
                                 <!--模态框-->
-                                <div id="model1"  class="modal fade bs-example-modal-lg " tabindex="-1"
+                                <div id="model1" class="modal fade bs-example-modal-lg " tabindex="-1"
                                      role="dialog" aria-labelledby="myLargeModalLabel">
-                                    <div style="margin:0 auto"  class="modal-dialog modal-lg" role="document">
+                                    <div style="margin:0 auto" class="modal-dialog modal-lg" role="document">
 
                                         <div class="modal-content" style="height: 800px">
                                             <div class="modal-header">
@@ -115,8 +119,8 @@
                                 <!--<td v-if="null!=bean.image_url"><img height="30px" :src="'img/news/'+bean.image_url"></td>-->
                                 <!--<td v-else>无</td>-->
                                 <!--<td v-if="null!=bean.video_url">-->
-                                    <!--<a href="#nowhere" @click="getVideoUrl(bean.video_url)" data-toggle="modal" data-target="#myModal">-->
-                                        <!--<span class="glyphicon glyphicon-list"></span></a>-->
+                                <!--<a href="#nowhere" @click="getVideoUrl(bean.video_url)" data-toggle="modal" data-target="#myModal">-->
+                                <!--<span class="glyphicon glyphicon-list"></span></a>-->
                                 <!--</td>-->
                                 <!--<td v-else>无</td>-->
                                 <td v-if="null!=bean.user_read">{{bean.user_read.realname}}</td>
@@ -152,7 +156,7 @@
 <script>
     $(function () {
         /*时间格式化*/
-        Vue.filter('dateformat', function(dataStr) {
+        Vue.filter('dateformat', function (dataStr) {
             return moment(dataStr).format('YYYY-MM-DD HH:mm:ss')
         });
 
@@ -162,12 +166,12 @@
             pagination: {},
             beans: [],
             bean: {
-                id: 0, user_write: {id:0,realname:""}, refer_time: "", note_type: {id: 0}, note_title: "", note: ""
-                , image_url: "", video_url: "", user_read: {id:0,realname:""},auditor_time:"", state: ""
+                id: 0, user_write: {id: 0, realname: ""}, refer_time: "", note_type: {id: 0}, note_title: "", note: ""
+                , image_url: "", video_url: "", user_read: {id: 0, realname: ""}, auditor_time: "", state: ""
             },
             keyword: "",
             is_search: "",
-            video_url:""
+            video_url: ""
         };
 
 
@@ -180,14 +184,14 @@
                 this.list(0);
             },
             methods: {
-                getUser:function () {
-                    this.bean.user_write.id=parseInt([[${session.user.id}]]);
+                getUser: function () {
+                    this.bean.user_write.id = parseInt([[${session.user.id}]]);
                 },
                 list: function (start) {
 //                    alert(1);
-                    var url=this.uri+"?user_write_id="+this.bean.user_write.id+"&start="+start;
-                    if(this.is_search)
-                        url = this.uri + "_search"+"?keyword=" + this.keyword+"&user_write_id="+this.bean.user_write.id+"&start="+start;
+                    var url = this.uri + "?user_write_id=" + this.bean.user_write.id + "&start=" + start;
+                    if (this.is_search)
+                        url = this.uri + "_search" + "?keyword=" + this.keyword + "&user_write_id=" + this.bean.user_write.id + "&start=" + start;
 
                     axios.get(url).then(function (response) {
                         console.log(response.data);
@@ -198,7 +202,7 @@
                 },
                 search: function () {
                     this.is_search = true;
-                    var url = this.uri + "_search"+"?keyword=" + this.keyword+"&user_write_id="+this.bean.user_write.id;
+                    var url = this.uri + "_search" + "?keyword=" + this.keyword + "&user_write_id=" + this.bean.user_write.id;
                     axios.get(url).then(function (response) {
                         console.log(response.data);
                         vue.pagination = response.data.data;
@@ -209,8 +213,8 @@
                     this.is_search = false;
                     this.list(0);
                 },
-                getVideoUrl:function (video_url) {
-                    this.video_url=video_url;
+                getVideoUrl: function (video_url) {
+                    this.video_url = video_url;
                 },
                 jump: function (page) {
                     jump(page, vue); //定义在adminHeader.html 中

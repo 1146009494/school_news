@@ -34,7 +34,7 @@
 
                 <!--搜索框开始-->
                 <!--<div class="container">-->
-                <div class="input-group">
+                <div class="col-sm-12 col-xs-12 input-group">
                     <input type="text" v-model="keyword" class="form-control input-md">
                     <span @click="search" class="input-group-addon btn btn-primary">搜索</span>
                     <span @click="all" class="input-group-addon btn btn-primary" th:text="显示全部"></span>
@@ -111,14 +111,7 @@
                                     </div>
                                 </div>
                             </div>
-                            <!--<td v-if="null!=bean.image_url"><img height="30px" :src="'img/news/'+bean.image_url">-->
-                            <!--</td>-->
-                            <!--<td v-else>无</td>-->
-                            <!--<td v-if="null!=bean.video_url">-->
-                            <!--<a href="#nowhere" @click="getVideoUrl(bean.video_url)" data-toggle="modal"-->
-                            <!--data-target="#myModal">-->
-                            <!--<span class="glyphicon glyphicon-list"></span></a>-->
-                            <!--</td>-->
+
                             <td v-else>无</td>
                             <td v-if="null!=bean.user_read">{{bean.user_read.realname}}</td>
                             <td v-else>未审核</td>
@@ -126,9 +119,7 @@
                             <td v-else>null</td>
                             <td><a href="#nowhere" @click="refuse(bean.id)">
                                 退回</a></td>
-                            <!--<td><a href="#nowhere" @click="getBean(bean.id)" data-toggle="modal" data-target="#myModal">-->
-                            <!--<span class="glyphicon glyphicon-edit"></span></a>-->
-                            <!--</td>-->
+
                         </tr>
                         </tbody>
                     </table>

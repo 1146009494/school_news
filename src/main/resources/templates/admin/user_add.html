@@ -28,23 +28,26 @@
             </div>
 
             <!--面包屑导航-->
-            <div class="col-md-12" style="text-align: left">
+            <div class="col-md-12 " style="text-align: left">
                 <ol class="breadcrumb">
                     <li><a href="/home">个人中心</a></li>
                     <li>新增用户</li>
                 </ol>
             </div>
             <!--栅栏布局3列-->
+            <div class="col-sm-3 col-xs-3">
             <div th:replace="include/admin/adminLeftMenu::html"></div>
-
+            </div>
             <!--栅栏布局9列开始-->
-            <div class="col-md-9 ">
-                <div>
+            <div class="col-md-9 col-sm-9 col-xs-9 ">
+                <div class="col-sm-12 col-xs-12" >
                     <form class="form-horizontal" role="form">
                         <div class="form-group">
                             <label class="col-sm-4 control-label">用户名：</label>
                             <div class="col-sm-6">
-                                <input name="username" class="form-control" v-model="bean.name"/>
+                                <input name="username" class="form-control" @keyup="check(bean.name)"  v-model="bean.name"/>
+                                <span v-if="is_have_name">用户名已存在</span>
+                                <span v-else></span>
                             </div>
                         </div>
                         <div class="form-group">
@@ -98,7 +101,8 @@
 
         var data4Vue = {
             uri: "user",
-            bean: {id: "", name: "", password: "", realname: "", phone: "", role: ""}
+            bean: {id: "", name: "", password: "", realname: "", phone: "", role: ""},
+            is_have_name: false
         };
 
         //ViewModel
@@ -107,11 +111,14 @@
             data: data4Vue,
             methods: {
                 add: function () {
-                    /*无内容直接提交验证*/
-                    if (this.bean.name == '' || this.bean.password == '' || this.bean.role == '')
+                    /*bootstrap提交验证*/
+                    var validator= $('form').data('bootstrapValidator').validate();
+                    if(!validator.isValid()){
+                        //没有通过校验
                         return;
-
-
+                    } else {
+                        //通过校验，可进行提交等操作
+                    }
                     var url = this.uri;
                     var formData = new FormData();
                     formData.append("name", this.bean.name);
@@ -125,7 +132,7 @@
                             alert("增加失败");
                         } else {
                             alert("增加成功");
-                            this.bean = {id: "", name: "", password: "", realname: "", phone: "", role: ""};
+                            vue.bean = {id: "", name: "", password: "", realname: "", phone: "", role: ""};
                         }
                     });
                 },
@@ -136,6 +143,22 @@
                         if (response.data.code == 0) location.href = "fore_login";
                     });
                 },
+                //                校验用户名是否存在，设置判断结果is_have_name
+                check: function (bean_name) {
+                    var url =  "userbyname/" + bean_name;
+//                    alert(url);
+                    axios.get(url).then(function (response) {
+                        console.log(response);
+                        if (response.data.code) {
+                            /*用户名不存在*/
+                            vue.is_have_name = false;
+                        }
+                        else {
+                            /*用户名已存在*/
+                            vue.is_have_name = true;
+                        }
+                    })
+                }
             }
         });
 
@@ -149,9 +172,10 @@
         $('form').bootstrapValidator({
             message: 'This value is not valid',
             feedbackIcons: {
-                valid: 'glyphicon glyphicon-ok',
-                invalid: 'glyphicon glyphicon-remove',
-                validating: 'glyphicon glyphicon-refresh'
+                /*icon样式问题*/
+//                valid: 'glyphicon glyphicon-ok',
+//                invalid: 'glyphicon glyphicon-remove',
+//                validating: 'glyphicon glyphicon-refresh'
             },
             fields: {
                 username: {
@@ -160,21 +184,22 @@
                         notEmpty: {
                             message: '用户名不能为空'
                         },
-                        stringLength: {
-                            min: 6,
-                            max: 18,
-                            message: '用户名长度必须在6到18位之间'
-                        },
-                        regexp: {
-                            regexp: /^[a-zA-Z0-9_]+$/,
-                            message: '用户名只能包含大写、小写、数字和下划线'
-                        }
+
                     }
                 },
                 password: {
                     validators: {
                         notEmpty: {
                             message: '密码不能为空'
+                        },
+                        stringLength: {
+                            min: 6,
+                            max: 18,
+                            message: '密码长度必须在6到18位之间'
+                        },
+                        regexp: {
+                            regexp: /^[a-zA-Z0-9_]+$/,
+                            message: '密码只能包含大写、小写、数字和下划线'
                         }
                     }
                 },

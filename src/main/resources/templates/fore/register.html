@@ -37,7 +37,7 @@
                             <label class="col-sm-2 control-label">用户名：</label>
                             <div class="col-sm-10">
 
-                                <input name="username" class="form-control"  @blur="check(bean.name)"
+                                <input name="username" class="form-control"  @keyup="check(bean.name)"
                                        v-model="bean.name"/>
                                 <span v-if="is_have_name">用户名已存在</span>
                                 <span v-else></span>
@@ -91,9 +91,14 @@
             methods: {
                 /*注册信息*/
                 register: function () {
-                    /*提交表单不能为空验证*/
-                    if (this.bean.name == "" || this.bean.password == "")
+                    /*bootstrap提交验证*/
+                    var validator= $('form').data('bootstrapValidator').validate();
+                    if(!validator.isValid()){
+                        //没有通过校验
                         return;
+                    } else {
+                        //通过校验，可进行提交等操作
+                    }
                     if (this.is_have_name) {
                         alert("信息输入有误")
                         return;
@@ -106,7 +111,6 @@
                         formData.append("phone", this.bean.phone);
                         formData.append("role", this.bean.role);
                         var url = "user";
-                        alert(1);
                         axios.post(url, formData).then(function (response) {
                             if (response.data.code)
                             /*注册失败*/alert("注册失败");
@@ -116,6 +120,7 @@
                         })
                     }
                 },
+//                校验用户名是否存在，设置判断结果is_have_name
                 check: function (bean_name) {
                     var url = this.uri + "/" + bean_name;
 //                    alert(url);
@@ -143,9 +148,9 @@
         $('form').bootstrapValidator({
             message: 'This value is not valid',
             feedbackIcons: {
-                valid: 'glyphicon glyphicon-ok',
-                invalid: 'glyphicon glyphicon-remove',
-                validating: 'glyphicon glyphicon-refresh'
+//                valid: 'glyphicon glyphicon-ok',
+//                invalid: 'glyphicon glyphicon-remove',
+//                validating: 'glyphicon glyphicon-refresh'
             },
             fields: {
                 username: {
@@ -153,15 +158,6 @@
                     validators: {
                         notEmpty: {
                             message: '用户名不能为空'
-                        },
-                        stringLength: {
-                            min: 6,
-                            max: 18,
-                            message: '用户名长度必须在6到18位之间'
-                        },
-                        regexp: {
-                            regexp: /^[a-zA-Z0-9_]+$/,
-                            message: '用户名只能包含大写、小写、数字和下划线'
                         }
                     }
                 },
@@ -169,6 +165,15 @@
                     validators: {
                         notEmpty: {
                             message: '密码不能为空'
+                        },
+                        stringLength: {
+                            min: 6,
+                            max: 18,
+                            message: '密码长度必须在6到18位之间'
+                        },
+                        regexp: {
+                            regexp: /^[a-zA-Z0-9_]+$/,
+                            message: '密码只能包含大写、小写、数字和下划线'
                         }
                     }
                 }

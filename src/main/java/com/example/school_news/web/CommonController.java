@@ -17,17 +17,18 @@ import java.util.Map;
 @RestController
 public class CommonController {
 
-        @PostMapping("/addImg")
+    /*富文本便能机器图片上传*/
+    @PostMapping("/addImg")
     public Object addImg(@RequestParam(value = "editorImage", required = false) MultipartFile img) throws FileNotFoundException {
         String folder = "news/img/";
-        String imgPath = ResourceUtils.getURL("classpath:").getPath() +"static/"+ folder;
-        String filename = RandomStringUtils.randomAlphabetic(10)+".jpg";
+        String imgPath = ResourceUtils.getURL("classpath:").getPath() + "static/" + folder;
+        String filename = RandomStringUtils.randomAlphabetic(10) + ".jpg";
         String imgUrl;
-        FileUtils.upload(img,imgPath, filename);
+        FileUtils.upload(img, imgPath, filename);
         imgUrl = folder + filename;
 //        Map<String,Object> map=new HashMap<>();
 //        map.put("imgurl",imgUrl);
-            return Result.success(imgUrl);
+        return Result.success(imgUrl);
 //        return imgUrl;
     }
 }

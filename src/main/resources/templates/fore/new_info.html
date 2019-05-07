@@ -103,7 +103,7 @@
                         <h3 class="text-center" >
                             <b>{{bean.note_title}}</b>
                         </h3>
-                        <div class="col-md-12" v-html="bean.note">
+                        <div class="col-md-12 col-sm-12 col-xs-12" v-html="bean.note">
                             <!--<span v-html="bean.note" ></span>-->
                         </div>
                     </div>
@@ -115,30 +115,7 @@
     </div>
 </div>
 
-<!--公有模块-->
-<script>
-    /*公有模块*/
-    //跳转函数
-    function jump(page, vue) {
-        if ('first' == page && !vue.pagination.first)
-            vue.list(0);
 
-        else if ('pre' == page && vue.pagination.hasPrevious)
-            vue.list(vue.pagination.number - 1);
-
-        else if ('next' == page && vue.pagination.hasNext)
-            vue.list(vue.pagination.number + 1);
-
-        else if ('last' == page && !vue.pagination.last)
-            vue.list(vue.pagination.totalPages - 1);
-    }
-
-    //跳转函数
-    function jumpByNumber(start, vue) {
-        if (start != vue.pagination.number)
-            vue.list(start);
-    }
-</script>
 <!--前后端交互-->
 <script>
     /*时间格式化 全局过滤器*/
@@ -146,18 +123,11 @@
         return moment(dataStr).format('YYYY-MM-DD HH:mm:ss')
     });
 
-    function getUrlParam(name) {
-        var reg = new RegExp("(^|&)" + name + "=([^&]*)(&|$)"); //构造一个含有目标参数的正则表达式对象
-        var r = window.location.search.substr(1).match(reg);  //匹配目标参数
-        if (r != null) return unescape(r[2]);
-        return null; //返回参数值
-    }
-
     $(function () {
         /*文档加载开始*/
 
         /*获取文章id*/
-        var nid = Number(getUrlParam("nid"));
+        var nid = Number(getUrlParms("nid"));
 
 
         var data4Vue = {

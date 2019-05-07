@@ -6,37 +6,6 @@
     <script th:src="@{js/axios/0.17.1/axios.min.js}"></script>
     <script th:src="@{js/moment/2.22.2/moment.js}"></script> <!-- vue.js 格式化日期用的 -->
     <script>
-        //判断是否为空
-        function isEmpty(value, text) {
-
-            if (null == value || value.length == 0) {
-                alert(text + "不能为空");
-                return false;
-            }
-            return true;
-        }
-
-        //判断是否为合理的用户名
-        function isRegisterUserName(s, text) {
-            var patrn = /^[a-zA-Z]{1}([a-zA-Z0-9]|[._]){4,19}$/;
-            if (!patrn.exec(s)) {
-//                alert(text + "只能输入5-20个以字母开头、可带数字、“_”、“.”的字串");
-                return false
-            }
-            return true
-        }
-
-        //  判断是否为正确的密码
-        function isUserPassword(s, text) {
-            var patrn = /^[a-zA-Z]\w{5,17}$/;
-            if (!patrn.exec(s)) {
-//                alert(text + "以字母开头，长度在6~18之间，只能包含字母、数字和下划线");
-                return false
-            }
-            return true
-        }
-
-
 
         //获取地址栏参数的函数
         function getUrlParms(para) {
@@ -67,33 +36,6 @@
             }
         }
 
-        //判断是否数字 (小数和整数)
-        function checkNumber(value, text) {
-
-            if (value.length == 0) {
-                alert(text + "不能为空");
-                return false;
-            }
-            if (isNaN(value)) {
-                alert(text + "必须是数字");
-                return false;
-            }
-            return true;
-        }
-
-        //判断是否整数
-        function checkInt(value, text) {
-
-            if (value.length == 0) {
-                alert(text + "不能为空");
-                return false;
-            }
-            if (parseInt(value) != value) {
-                alert(text + "必须是整数");
-                return false;
-            }
-            return true;
-        }
 
         //确实是否要删除
         function checkDeleteLink() {

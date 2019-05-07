@@ -39,7 +39,7 @@
 
                 <!--搜索框开始-->
                 <!--<div class="container">-->
-                <div class="input-group">
+                <div class="col-sm-12 col-xs-12 input-group">
                     <input type="text" v-model="keyword" class="form-control input-md">
                     <span @click="search" class="input-group-addon btn btn-primary">搜索</span>
                     <span @click="all" class="input-group-addon btn btn-primary" th:text="显示全部"></span>
@@ -265,9 +265,9 @@
         $('form').bootstrapValidator({
             message: 'This value is not valid',
             feedbackIcons: {
-                valid: 'glyphicon glyphicon-ok',
-                invalid: 'glyphicon glyphicon-remove',
-                validating: 'glyphicon glyphicon-refresh'
+//                valid: 'glyphicon glyphicon-ok',
+//                invalid: 'glyphicon glyphicon-remove',
+//                validating: 'glyphicon glyphicon-refresh'
             },
             fields: {
                 username: {
@@ -275,15 +275,6 @@
                     validators: {
                         notEmpty: {
                             message: '用户名不能为空'
-                        },
-                        stringLength: {
-                            min: 6,
-                            max: 18,
-                            message: '用户名长度必须在6到18位之间'
-                        },
-                        regexp: {
-                            regexp: /^[a-zA-Z0-9_]+$/,
-                            message: '用户名只能包含大写、小写、数字和下划线'
                         }
                     }
                 },
@@ -291,6 +282,15 @@
                     validators: {
                         notEmpty: {
                             message: '密码不能为空'
+                        },
+                        stringLength: {
+                            min: 6,
+                            max: 18,
+                            message: '密码长度必须在6到18位之间'
+                        },
+                        regexp: {
+                            regexp: /^[a-zA-Z0-9_]+$/,
+                            message: '密码只能包含大写、小写、数字和下划线'
                         }
                     }
                 },

@@ -6,11 +6,9 @@ import com.example.school_news.util.FileUtils;
 import com.example.school_news.util.Page4Navigator;
 import com.example.school_news.util.Result;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.HttpRequest;
 import org.springframework.util.ResourceUtils;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
-import sun.net.httpserver.HttpsServerImpl;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;

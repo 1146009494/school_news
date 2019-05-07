@@ -61,7 +61,7 @@
                         <!--</div>-->
                         <div class="form-group">
                             <div class="col-sm-offset-1 col-sm-10" align="center">
-                                <button  class="btn btn-primary" @click="login">登陆</button>
+                                <button type="submit"  class="btn btn-primary" @click="login">登陆</button>
                                 <a class="btn btn-primary" @click="register">注册</a>
                             </div>
                         </div>
@@ -90,9 +90,14 @@
             },
             methods: {
                 login: function () {
-                    /*无内容提交校验*/
-                    if (this.bean.name == "" || this.bean.password == "")
+                    /*bootstrap提交验证*/
+                    var validator= $('form').data('bootstrapValidator').validate();
+                    if(!validator.isValid()){
+                        //没有通过校验
                         return;
+                    } else {
+                        //通过校验，可进行提交等操作
+                    }
                     var url = "fore_loginPage";
                     var formdata = new FormData();
                     formdata.append("name", this.bean.name);
@@ -126,9 +131,9 @@
         $('form').bootstrapValidator({
             message: 'This value is not valid',
             feedbackIcons: {
-                valid: 'glyphicon glyphicon-ok',
-                invalid: 'glyphicon glyphicon-remove',
-                validating: 'glyphicon glyphicon-refresh'
+//                valid: 'glyphicon glyphicon-ok',
+//                invalid: 'glyphicon glyphicon-remove',
+//                validating: 'glyphicon glyphicon-refresh'
             },
             fields: {
                 username: {

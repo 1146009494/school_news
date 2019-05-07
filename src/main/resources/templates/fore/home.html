@@ -16,7 +16,7 @@
 <div id="workingArea" class="container">
     <div class="row clearfix">
         <!--导航栏-->
-        <div class="col-md-12 ">
+        <div class="col-md-12 col-ms-12 col-xs-12">
             <!--顶部导航栏-->
             <nav class="navbar navbar-inverse " role="navigation">
                 <div class="navbar-header">
@@ -30,8 +30,8 @@
                 <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
                     <ul class="nav navbar-nav">
                         <li v-for="type in types">
-                            <a href="#" @click="search_type(type.name)">{{type.name}}</a>
-                        </li>
+                        <a href="#" @click="search_type(type.name)">{{type.name}}</a>
+                    </li>
 
                     </ul>
                     <form class="navbar-form navbar-left">
@@ -246,6 +246,7 @@
                 },
                 methods: {
                     list: function (start) {
+
                         var url = this.uri + "bystate/" + this.state + "?start=" + start + "&size=" + this.size;
 //                    如果是条件查询就访问这个请求
                         if (this.is_search) {
@@ -260,6 +261,7 @@
                     getNewType: function () {
                         var url = "type";
                         axios.get(url).then(function (response) {
+                            console.log(response);
                             vue.types = response.data.data.content;
                         })
                     },

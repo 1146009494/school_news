@@ -38,15 +38,18 @@
                     </ol>
                 </div>
                 <!--栅栏布局3列-->
-                <div th:replace="include/admin/adminLeftMenu::html"></div>
-
-                <!--栅栏布局9列开始-->
-                <div class="col-md-9 ">
+                <div class="col-md-3 col-sm-3 col-xs-3" >
+                <div  th:replace="include/admin/adminLeftMenu::html"></div>
+            </div>
+                <!--栅栏布局8列开始-->
+                <div class="col-md-8  col-sm-9  col-xs-9 " >
                     <!--查询结果显示开始-->
-                    <div>
-                        <span class="text-muted">新闻类别列表</span>
+                    <div class="col-sm-2 col-xs-2"></div>
+                    <div class=" col-sm-10 col-xs-10" >
+                        <div class=" text-muted">新闻类别列表</div>
                         <table class="table table-striped table-bordered table-hover  table-condensed">
                             <thead>
+
                             <tr class="success">
                                 <th>ID</th>
                                 <th>类别名称</th>
@@ -67,29 +70,31 @@
                             </tr>
                             </tbody>
                         </table>
+
+
+                        <!--分页显示-->
+                        <div th:replace="include/admin/adminPage::html"></div>
+
+                        <!--增加模块-->
+                        <div>
+                            <form class="form-horizontal" role="form">
+                                <h2>新增新闻类别</h2>
+                                <div class="form-group">
+                                    <label class="col-sm-4 control-label">新增类别：</label>
+                                    <div class="col-sm-4">
+                                        <input class="form-control" v-model="bean.name"/>
+                                    </div>
+                                </div>
+                                <div class="form-group">
+                                    <button class="btn btn-primary" type="button" @click="add">增加</button>
+                                </div>
+                            </form>
+                        </div>
                     </div>
                     <!--查询结果显示结束-->
-                    <!--分页显示-->
-                    <div th:replace="include/admin/adminPage::html"></div>
 
-
-                    <!--增加模块-->
-                    <div>
-                        <form class="form-horizontal" role="form">
-                            <h2>新增新闻类别</h2>
-                            <div class="form-group">
-                                <label class="col-sm-4 control-label">新增类别：</label>
-                                <div class="col-sm-4">
-                                    <input class="form-control" v-model="bean.name"/>
-                                </div>
-                            </div>
-                            <div class="form-group">
-                                <button class="btn btn-primary" type="button" @click="add">增加</button>
-                            </div>
-                        </form>
-                    </div>
                 </div>
-                <!--栅栏布局9列结束-->
+                <!--栅栏布局8列结束-->
 
 
                 <!--模态窗体修改开始-->
